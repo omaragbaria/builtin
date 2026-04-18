@@ -1,0 +1,13 @@
+# Logs
+*.log
+
+# Maven build output
+target/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store

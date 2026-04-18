@@ -1,0 +1,16 @@
+{
+  "name": "builtin-webapp",
+  "version": "1.0.0",
+  "description": "BuiltIn Store Web Application frontend assets",
+  "scripts": {
+    "build": "sass src/main/resources/static/css/main.scss src/main/resources/static/css/main.css --style compressed",
+    "watch": "sass --watch src/main/resources/static/css/main.scss src/main/resources/static/css/main.css"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3"
+  },
+  "devDependencies": {
+    "sass": "^1.77.0"
+  }
+}
