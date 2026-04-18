@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>${pageTitle} - BuiltIn Store</title>
+    <title>${pageTitle} - Conex</title>
+    <link rel="icon" type="image/svg+xml" href="/img/logo-icon.svg"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
     <link rel="stylesheet" href="/css/main.css"/>
@@ -14,8 +15,8 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
     <div class="container">
-        <a class="navbar-brand fw-bold fs-4" href="/">
-            <i class="bi bi-bag-fill me-2 text-warning"></i>BuiltIn
+        <a class="navbar-brand" href="/">
+            <img src="/img/logo.svg" alt="Conex" height="40"/>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
             <span class="navbar-toggler-icon"></span>
@@ -37,6 +38,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/agent"><i class="bi bi-robot me-1"></i>AI Assistant</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/calculator"><i class="bi bi-building me-1"></i>Calculator</a>
                 </li>
                 <#if currentUser?? && currentUser.canAddItems()>
                 <li class="nav-item">
@@ -88,8 +92,8 @@
 <!-- Footer -->
 <footer class="bg-dark text-white mt-5 py-4">
     <div class="container text-center">
-        <p class="mb-1">&copy; 2025 BuiltIn Store. All rights reserved.</p>
-        <small class="text-muted">Your one-stop shop for everything.</small>
+        <p class="mb-1">&copy; 2025 Conex. All rights reserved.</p>
+        <small class="text-muted">Connect &amp; Execute — Built for buildings.</small>
     </div>
 </footer>
 

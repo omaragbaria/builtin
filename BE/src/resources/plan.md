@@ -55,8 +55,43 @@
 
 ---
 
+## Feature 4: Construction Materials Calculator
+
+**Goal:** Allow users to input structural dimensions (e.g. roof size, wall area) and get an accurate calculation of the required concrete, iron/rebar, and other materials. The result includes matched store products with an option to add them to the cart.
+
+**Example interaction:**
+> "I need to pour a concrete roof — 8m × 6m, 20cm thick."
+> → Calculator returns: concrete volume (m³), iron rebar (kg/count), wire mesh, formwork — all matched to the lowest-price store products with "Add to Cart" buttons.
+
+### Supported Structures (v1)
+| Structure | Inputs | Outputs |
+|-----------|--------|---------|
+| Flat roof slab | Length × Width × Thickness | Concrete (m³), Iron rebar (kg), Wire mesh (m²) |
+| Wall | Length × Height × Thickness | Concrete (m³), Iron rebar (kg), Blocks (units) |
+
+> More structure types (columns, footings, stairs) can be added in future iterations.
+
+### Material Types (v1)
+- Concrete (calculated in m³)
+- Iron / Rebar (calculated in kg, with standard bar sizes)
+- *(Extensible — new material types added per structure in future)*
+
+### Tasks
+
+- [x] **4.1** Define calculation formulas for each structure type (roof slab, wall) — concrete volume, rebar weight, mesh area
+- [x] **4.2** Create `CalculatorRequest` model — structure type, dimensions, unit system
+- [x] **4.3** Create `CalculatorResult` model — list of materials with quantity, unit, and matched store products
+- [x] **4.4** Implement calculator service — pluggable per structure type, easy to extend
+- [x] **4.5** Map calculated materials to real store products (same matching logic as Agent Feature 1)
+- [x] **4.6** Create API endpoint: `POST /calculator/calculate` — accepts structure type + dimensions, returns materials list with product matches
+- [x] **4.7** Build calculator UI page — form for structure type + dimensions, results section with add-to-cart buttons
+- [x] **4.8** Add "Add all to cart" and per-item "Add to cart" on the calculator results
+
+---
+
 ## Priority Order
 
-1. Feature 2 — Shipping (lower complexity, builds on existing cart)
-2. Feature 1 — AI Agent (core differentiator, needs more design)
-3. Feature 3 — Mobile Scaffolding (quick, non-blocking)
+1. Feature 2 — Shipping ✅ (done)
+2. Feature 1 — AI Agent ✅ (done)
+3. Feature 3 — Mobile Scaffolding ✅ (done)
+4. Feature 4 — Construction Materials Calculator ✅ (done)

@@ -4,8 +4,8 @@
 <!-- Hero -->
 <section class="hero-section text-white text-center py-5">
     <div class="container py-4">
-        <h1 class="display-4 fw-bold mb-3">Welcome to BuiltIn Store</h1>
-        <p class="lead mb-4">Discover quality products from trusted providers near you.</p>
+        <h1 class="display-4 fw-bold mb-3">Welcome to Conex</h1>
+        <p class="lead mb-4">Connect with trusted providers. Execute your building projects.</p>
         <form class="d-flex justify-content-center" action="/search" method="get">
             <div class="input-group w-50">
                 <input class="form-control form-control-lg" type="search" name="query" placeholder="What are you looking for?" />
