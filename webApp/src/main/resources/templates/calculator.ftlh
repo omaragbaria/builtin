@@ -25,7 +25,7 @@
                                     <input class="form-check-input" type="radio" name="structureType"
                                            id="roofSlab" value="ROOF_SLAB"
                                            onchange="toggleFields()"
-                                           ${(!request?? || request.structureType == "ROOF_SLAB")?then("checked", "")}>
+                                           <#if !request?? || request.structureType == "ROOF_SLAB">checked</#if>>
                                     <label class="form-check-label fw-semibold" for="roofSlab">
                                         <i class="bi bi-house-door me-1 text-warning"></i>Roof / Floor Slab
                                     </label>
@@ -34,7 +34,7 @@
                                     <input class="form-check-input" type="radio" name="structureType"
                                            id="wall" value="WALL"
                                            onchange="toggleFields()"
-                                           ${(request?? && request.structureType == "WALL")?then("checked", "")}>
+                                           <#if request?? && request.structureType == "WALL">checked</#if>>
                                     <label class="form-check-label fw-semibold" for="wall">
                                         <i class="bi bi-bricks me-1 text-warning"></i>Wall
                                     </label>
@@ -48,7 +48,7 @@
                                 <label class="form-label fw-semibold">Length (m)</label>
                                 <input type="number" name="length" step="0.1" min="0.1"
                                        class="form-control"
-                                       value="${request??then(request.length?string['0.##'], '')}"
+                                       <#if request??>value="${request.length?string['0.##']}"</#if>
                                        placeholder="e.g. 8" required/>
                             </div>
 
@@ -57,7 +57,7 @@
                                 <label class="form-label fw-semibold">Width (m)</label>
                                 <input type="number" name="width" step="0.1" min="0.1"
                                        class="form-control"
-                                       value="${request??then(request.width?string['0.##'], '')}"
+                                       <#if request??>value="${request.width?string['0.##']}"</#if>
                                        placeholder="e.g. 6"/>
                             </div>
 
@@ -66,7 +66,7 @@
                                 <label class="form-label fw-semibold">Height (m)</label>
                                 <input type="number" name="height" step="0.1" min="0.1"
                                        class="form-control"
-                                       value="${request??then(request.height?string['0.##'], '')}"
+                                       <#if request??>value="${request.height?string['0.##']}"</#if>
                                        placeholder="e.g. 3"/>
                             </div>
 
@@ -74,7 +74,7 @@
                                 <label class="form-label fw-semibold">Thickness (m)</label>
                                 <input type="number" name="thickness" step="0.01" min="0.05"
                                        class="form-control"
-                                       value="${request??then(request.thickness?string['0.##'], '0.2')}"
+                                       <#if request??>value="${request.thickness?string['0.##']}"<#else>value="0.20"</#if>
                                        placeholder="e.g. 0.20" required/>
                                 <div class="form-text">Slab: 0.15–0.25 m | Wall: 0.20 m</div>
                             </div>

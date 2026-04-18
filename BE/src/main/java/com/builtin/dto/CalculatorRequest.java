@@ -2,6 +2,7 @@ package com.builtin.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 @Data
@@ -11,14 +12,14 @@ public class CalculatorRequest {
     private String structureType; // ROOF_SLAB, WALL
 
     @Positive
-    private double length;        // metres
+    private double length;        // metres (always required)
 
-    @Positive
-    private double width;         // metres (roof slab)
+    @PositiveOrZero
+    private double width;         // metres (roof slab; 0 when not applicable)
 
-    @Positive
-    private double height;        // metres (wall)
+    @PositiveOrZero
+    private double height;        // metres (wall; 0 when not applicable)
 
-    @Positive
-    private double thickness;     // metres
+    @PositiveOrZero
+    private double thickness;     // metres (defaults applied in service if 0)
 }
