@@ -1,0 +1,43 @@
+/* RTL layout support — loaded only for ar / he locales */
+
+[dir="rtl"] body {
+    font-family: 'Segoe UI', 'Arial', system-ui, sans-serif;
+}
+
+/* Flip Bootstrap margin/padding utilities */
+[dir="rtl"] .ms-auto { margin-left: unset !important; margin-right: auto !important; }
+[dir="rtl"] .me-auto { margin-right: unset !important; margin-left: auto !important; }
+[dir="rtl"] .ms-1    { margin-left: unset !important; margin-right: 0.25rem !important; }
+[dir="rtl"] .me-1    { margin-right: unset !important; margin-left: 0.25rem !important; }
+[dir="rtl"] .ms-2    { margin-left: unset !important; margin-right: 0.5rem !important; }
+[dir="rtl"] .me-2    { margin-right: unset !important; margin-left: 0.5rem !important; }
+
+/* Navbar: align brand + items correctly for RTL */
+[dir="rtl"] .navbar-nav {
+    flex-direction: row-reverse;
+}
+[dir="rtl"] .dropdown-menu-end {
+    right: auto !important;
+    left: 0 !important;
+}
+
+/* Flip arrows */
+[dir="rtl"] .bi-arrow-right::before { content: "\f12f"; } /* bi-arrow-left */
+[dir="rtl"] .bi-arrow-left::before  { content: "\f138"; } /* bi-arrow-right */
+
+/* Breadcrumb separator */
+[dir="rtl"] .breadcrumb-item + .breadcrumb-item::before {
+    content: "\\";
+}
+
+/* Card footer / list alignment */
+[dir="rtl"] .text-end { text-align: left !important; }
+[dir="rtl"] .text-start { text-align: right !important; }
+
+/* Product list view */
+[dir="rtl"] .card-body.d-flex {
+    flex-direction: row-reverse;
+}
+
+/* Form range labels */
+[dir="rtl"] .form-label { text-align: right; }

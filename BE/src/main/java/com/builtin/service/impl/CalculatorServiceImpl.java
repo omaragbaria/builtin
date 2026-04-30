@@ -146,7 +146,7 @@ public class CalculatorServiceImpl implements CalculatorService {
 
     private boolean matchesKeyword(Item item, String keyword) {
         String name     = item.getName()     != null ? item.getName().toLowerCase()     : "";
-        String category = item.getCategory() != null ? item.getCategory().toLowerCase() : "";
+        String category = item.getCategory() != null ? item.getCategory().name().toLowerCase() : "";
         String type     = item.getType()     != null ? item.getType().toLowerCase()     : "";
         return name.contains(keyword) || category.contains(keyword) || type.contains(keyword);
     }

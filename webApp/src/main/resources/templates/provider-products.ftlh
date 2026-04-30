@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <h4 class="fw-bold mb-4">Products <small class="text-muted fs-6">(${items?size} items)</small></h4>
+    <h4 class="fw-bold mb-4">${springMacroRequestContext.getMessage('common.products')} <small class="text-muted fs-6">(${items?size})</small></h4>
 
     <#if items?? && items?has_content>
     <div class="row g-4">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-white border-top-0 pb-3">
-                    <a href="/products/${item.id?c}" class="btn btn-dark btn-sm w-100">View Details</a>
+                    <a href="/products/${item.id?c}" class="btn btn-dark btn-sm w-100">${springMacroRequestContext.getMessage('common.view_details')}</a>
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
     <#else>
     <div class="text-center py-5">
         <i class="bi bi-box-seam fs-1 text-muted"></i>
-        <p class="mt-3 text-muted">This store has no products yet.</p>
+        <p class="mt-3 text-muted">${springMacroRequestContext.getMessage('common.no_products')}</p>
     </div>
     </#if>
 

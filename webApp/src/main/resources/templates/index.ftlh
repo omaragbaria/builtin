@@ -4,13 +4,14 @@
 <!-- Hero -->
 <section class="hero-section text-white text-center py-5">
     <div class="container py-4">
-        <h1 class="display-4 fw-bold mb-3">Welcome to Conex</h1>
-        <p class="lead mb-4">Connect with trusted providers. Execute your building projects.</p>
+        <h1 class="display-4 fw-bold mb-3">${springMacroRequestContext.getMessage('home.hero.title')}</h1>
+        <p class="lead mb-4">${springMacroRequestContext.getMessage('home.hero.subtitle')}</p>
         <form class="d-flex justify-content-center" action="/search" method="get">
             <div class="input-group w-50">
-                <input class="form-control form-control-lg" type="search" name="query" placeholder="What are you looking for?" />
+                <input class="form-control form-control-lg" type="search" name="query"
+                       placeholder="${springMacroRequestContext.getMessage('home.hero.search_placeholder')}" />
                 <button class="btn btn-warning btn-lg" type="submit">
-                    <i class="bi bi-search me-1"></i>Search
+                    <i class="bi bi-search me-1"></i>${springMacroRequestContext.getMessage('home.hero.search')}
                 </button>
             </div>
         </form>
@@ -20,7 +21,7 @@
 <!-- Providers -->
 <#if providers?? && providers?has_content>
 <section class="container my-5">
-    <h2 class="fw-bold mb-4"><i class="bi bi-shop me-2 text-warning"></i>Our Stores</h2>
+    <h2 class="fw-bold mb-4"><i class="bi bi-shop me-2 text-warning"></i>${springMacroRequestContext.getMessage('home.stores')}</h2>
     <div class="row g-3">
         <#list providers as provider>
         <div class="col-6 col-md-4 col-lg-3">
@@ -47,8 +48,8 @@
 <#if featuredItems?? && featuredItems?has_content>
 <section class="container my-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold mb-0"><i class="bi bi-star me-2 text-warning"></i>Featured Products</h2>
-        <a href="/products" class="btn btn-outline-dark btn-sm">View All <i class="bi bi-arrow-right ms-1"></i></a>
+        <h2 class="fw-bold mb-0"><i class="bi bi-star me-2 text-warning"></i>${springMacroRequestContext.getMessage('home.featured')}</h2>
+        <a href="/products" class="btn btn-outline-dark btn-sm">${springMacroRequestContext.getMessage('home.featured.view_all')} <i class="bi bi-arrow-right ms-1"></i></a>
     </div>
     <div class="row g-4">
         <#list featuredItems as item>
@@ -70,14 +71,14 @@
                     <div class="mt-3 d-flex justify-content-between align-items-center">
                         <span class="fw-bold text-dark fs-5">₪${item.price}</span>
                         <#if item.quantity?? && item.quantity gt 0>
-                        <small class="text-success"><i class="bi bi-check-circle me-1"></i>In Stock</small>
+                        <small class="text-success"><i class="bi bi-check-circle me-1"></i>${springMacroRequestContext.getMessage('common.in_stock')}</small>
                         <#else>
-                        <small class="text-danger"><i class="bi bi-x-circle me-1"></i>Out of Stock</small>
+                        <small class="text-danger"><i class="bi bi-x-circle me-1"></i>${springMacroRequestContext.getMessage('common.out_of_stock')}</small>
                         </#if>
                     </div>
                 </div>
                 <div class="card-footer bg-white border-top-0 pb-3">
-                    <a href="/products/${item.id?c}" class="btn btn-dark btn-sm w-100">View Details</a>
+                    <a href="/products/${item.id?c}" class="btn btn-dark btn-sm w-100">${springMacroRequestContext.getMessage('common.view_details')}</a>
                 </div>
             </div>
         </div>

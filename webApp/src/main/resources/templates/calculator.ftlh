@@ -1,5 +1,5 @@
 <#import "layout/main.ftlh" as layout>
-<@layout.main pageTitle="Materials Calculator">
+<@layout.main pageTitle="${springMacroRequestContext.getMessage('calculator.title')}">
 
 <div class="container my-5">
     <div class="row justify-content-center">
@@ -8,8 +8,8 @@
             <!-- Header -->
             <div class="text-center mb-4">
                 <i class="bi bi-building fs-1 text-warning"></i>
-                <h2 class="fw-bold mt-2">Construction Materials Calculator</h2>
-                <p class="text-muted">Enter your structure dimensions and get an instant materials estimate.</p>
+                <h2 class="fw-bold mt-2">${springMacroRequestContext.getMessage('calculator.title')}</h2>
+                <p class="text-muted">${springMacroRequestContext.getMessage('calculator.subtitle')}</p>
             </div>
 
             <!-- Input form -->
@@ -19,7 +19,7 @@
 
                         <!-- Structure type -->
                         <div class="mb-4">
-                            <label class="form-label fw-semibold">Structure Type</label>
+                            <label class="form-label fw-semibold">${springMacroRequestContext.getMessage('calculator.structure_type')}</label>
                             <div class="d-flex gap-3">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="structureType"
@@ -27,7 +27,7 @@
                                            onchange="toggleFields()"
                                            <#if !request?? || request.structureType == "ROOF_SLAB">checked</#if>>
                                     <label class="form-check-label fw-semibold" for="roofSlab">
-                                        <i class="bi bi-house-door me-1 text-warning"></i>Roof / Floor Slab
+                                        <i class="bi bi-house-door me-1 text-warning"></i>${springMacroRequestContext.getMessage('calculator.roof_slab')}
                                     </label>
                                 </div>
                                 <div class="form-check">
@@ -36,7 +36,7 @@
                                            onchange="toggleFields()"
                                            <#if request?? && request.structureType == "WALL">checked</#if>>
                                     <label class="form-check-label fw-semibold" for="wall">
-                                        <i class="bi bi-bricks me-1 text-warning"></i>Wall
+                                        <i class="bi bi-bricks me-1 text-warning"></i>${springMacroRequestContext.getMessage('calculator.wall')}
                                     </label>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                         <!-- Dimensions -->
                         <div class="row g-3">
                             <div class="col-md-3">
-                                <label class="form-label fw-semibold">Length (m)</label>
+                                <label class="form-label fw-semibold">${springMacroRequestContext.getMessage('calculator.length')}</label>
                                 <input type="number" name="length" step="0.1" min="0.1"
                                        class="form-control"
                                        <#if request??>value="${request.length?string['0.##']}"</#if>
@@ -54,7 +54,7 @@
 
                             <!-- Width — shown for roof slab -->
                             <div class="col-md-3" id="widthField">
-                                <label class="form-label fw-semibold">Width (m)</label>
+                                <label class="form-label fw-semibold">${springMacroRequestContext.getMessage('calculator.width')}</label>
                                 <input type="number" name="width" step="0.1" min="0.1"
                                        class="form-control"
                                        <#if request??>value="${request.width?string['0.##']}"</#if>
@@ -63,7 +63,7 @@
 
                             <!-- Height — shown for wall -->
                             <div class="col-md-3" id="heightField" style="display:none;">
-                                <label class="form-label fw-semibold">Height (m)</label>
+                                <label class="form-label fw-semibold">${springMacroRequestContext.getMessage('calculator.height')}</label>
                                 <input type="number" name="height" step="0.1" min="0.1"
                                        class="form-control"
                                        <#if request??>value="${request.height?string['0.##']}"</#if>
@@ -71,7 +71,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label class="form-label fw-semibold">Thickness (m)</label>
+                                <label class="form-label fw-semibold">${springMacroRequestContext.getMessage('calculator.thickness')}</label>
                                 <input type="number" name="thickness" step="0.01" min="0.05"
                                        class="form-control"
                                        <#if request??>value="${request.thickness?string['0.##']}"<#else>value="0.20"</#if>
@@ -82,7 +82,7 @@
 
                         <div class="mt-4">
                             <button type="submit" class="btn btn-warning fw-bold px-4">
-                                <i class="bi bi-calculator me-2"></i>Calculate Materials
+                                <i class="bi bi-calculator me-2"></i>${springMacroRequestContext.getMessage('calculator.calculate')}
                             </button>
                         </div>
                     </form>
@@ -118,7 +118,7 @@
                                     <th>Product</th>
                                     <th>Provider</th>
                                     <th>Price</th>
-                                    <th>In Stock</th>
+                                    <th>${springMacroRequestContext.getMessage('common.in_stock')}</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -133,12 +133,12 @@
                                     </td>
                                     <td><small class="text-muted">${item.providerName!""}</small></td>
                                     <td class="fw-bold">₪${item.price} / ${item.unit}</td>
-                                    <td><small>${item.availableQuantity} units</small></td>
+                                    <td><small>${item.availableQuantity}</small></td>
                                     <td>
                                         <form action="/cart/add/${item.itemId}" method="post">
                                             <input type="hidden" name="quantity" value="1"/>
                                             <button type="submit" class="btn btn-sm btn-outline-dark">
-                                                <i class="bi bi-cart-plus me-1"></i>Add
+                                                <i class="bi bi-cart-plus me-1"></i>${springMacroRequestContext.getMessage('common.add_to_cart')}
                                             </button>
                                         </form>
                                     </td>
@@ -161,7 +161,7 @@
                 <div class="card-body d-flex align-items-center justify-content-between flex-wrap gap-3">
                     <div>
                         <h6 class="fw-bold mb-1">
-                            <i class="bi bi-bag-check me-2 text-warning"></i>Add all best-price items to cart
+                            <i class="bi bi-bag-check me-2 text-warning"></i>${springMacroRequestContext.getMessage('common.add_all_to_cart')}
                         </h6>
                         <small class="text-muted">Adds the lowest-priced match for each material.</small>
                     </div>
@@ -172,7 +172,7 @@
                             </#if>
                         </#list>
                         <button type="submit" class="btn btn-warning fw-bold">
-                            <i class="bi bi-cart-check me-2"></i>Add All to Cart
+                            <i class="bi bi-cart-check me-2"></i>${springMacroRequestContext.getMessage('common.add_all_to_cart')}
                         </button>
                     </form>
                 </div>
@@ -190,7 +190,6 @@ function toggleFields() {
     document.getElementById('widthField').style.display  = isWall ? 'none'  : '';
     document.getElementById('heightField').style.display = isWall ? ''      : 'none';
 }
-// Run on page load to restore correct state after form submit
 document.addEventListener('DOMContentLoaded', toggleFields);
 </script>
 

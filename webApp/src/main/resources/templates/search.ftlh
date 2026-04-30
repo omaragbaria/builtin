@@ -1,12 +1,12 @@
 <#import "layout/main.ftlh" as layout>
-<@layout.main pageTitle="Search Results">
+<@layout.main pageTitle="${springMacroRequestContext.getMessage('search.title')}">
 
 <div class="container my-5">
     <h4 class="fw-bold mb-1">
         <#if query?? && query?has_content>
-            Results for "<span class="text-warning">${query}</span>"
+            ${springMacroRequestContext.getMessage('search.for')} "<span class="text-warning">${query}</span>"
         <#else>
-            All Products
+            ${springMacroRequestContext.getMessage('products.all')}
         </#if>
     </h4>
     <p class="text-muted mb-4">${items?size} item(s) found</p>
@@ -26,7 +26,7 @@
                     <div class="mt-2 fw-bold fs-5">₪${item.price}</div>
                 </div>
                 <div class="card-footer bg-white border-top-0 pb-3">
-                    <a href="/products/${item.id?c}" class="btn btn-dark btn-sm w-100">View Details</a>
+                    <a href="/products/${item.id?c}" class="btn btn-dark btn-sm w-100">${springMacroRequestContext.getMessage('common.view_details')}</a>
                 </div>
             </div>
         </div>
@@ -35,8 +35,8 @@
     <#else>
     <div class="text-center py-5">
         <i class="bi bi-search fs-1 text-muted"></i>
-        <p class="mt-3 text-muted fs-5">No results found for "<strong>${query}</strong>"</p>
-        <a href="/products" class="btn btn-dark">Browse All Products</a>
+        <p class="mt-3 text-muted fs-5">${springMacroRequestContext.getMessage('search.no_results')} "<strong>${query!""}</strong>"</p>
+        <a href="/products" class="btn btn-dark">${springMacroRequestContext.getMessage('common.browse_all')}</a>
     </div>
     </#if>
 </div>

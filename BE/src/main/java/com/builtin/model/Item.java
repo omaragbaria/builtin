@@ -27,11 +27,29 @@ public class Item {
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "name_ar")
+    private String nameAr;
+
+    @Column(name = "name_he")
+    private String nameHe;
+
+    @Column(name = "name_ru")
+    private String nameRu;
+
+    @Column(name = "name_zh")
+    private String nameZh;
+
     @Column(name = "item_type")
     private String type;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "category")
-    private String category;
+    private ItemCategory category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "color")
+    @Builder.Default
+    private ItemColor color = ItemColor.NA;
 
     @Column(name = "serial_number", unique = true)
     private String serialNumber;
@@ -39,6 +57,15 @@ public class Item {
     @NotNull
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
+
+    @Column(name = "customer_price", precision = 10, scale = 2)
+    private BigDecimal customerPrice;
+
+    @Column(name = "contractor_price", precision = 10, scale = 2)
+    private BigDecimal contractorPrice;
+
+    @Column(name = "qty_per_package")
+    private Integer qtyPerPackage;
 
     @Column(nullable = false)
     private Integer quantity;

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/products")
@@ -30,9 +31,11 @@ public class ProductController {
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false, defaultValue = "card") String view,
-            Model model) {
+            Model model, Locale locale) {
 
+        String lang = locale.getLanguage();
         List<ItemDto> allItems = itemClient.getAllItems();
+        allItems.forEach(i -> i.localize(lang));
         List<ItemDto> items = allItems.stream()
                 .filter(i -> category == null || category.isBlank() || category.equalsIgnoreCase(i.getCategory()))
                 .filter(i -> minPrice == null || (i.getPrice() != null && i.getPrice().compareTo(minPrice) >= 0))
@@ -59,15 +62,18 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public String productDetail(@PathVariable Long id, Model model, RedirectAttributes ra) {
+    public String productDetail(@PathVariable Long id, Model model, RedirectAttributes ra, Locale locale) {
         try {
+            String lang = locale.getLanguage();
             var item = itemClient.getItemById(id);
+            item.localize(lang);
             model.addAttribute("item", item);
             if (item.getProvider() != null) {
-                model.addAttribute("providerItems",
-                        itemClient.getItemsByProvider(item.getProvider().getId()).stream()
-                                .filter(i -> !i.getId().equals(id))
-                                .limit(4).toList());
+                List<ItemDto> related = itemClient.getItemsByProvider(item.getProvider().getId()).stream()
+                        .filter(i -> !i.getId().equals(id))
+                        .limit(4).toList();
+                related.forEach(i -> i.localize(lang));
+                model.addAttribute("providerItems", related);
             }
             return "product-detail";
         } catch (WebClientResponseException.NotFound e) {
@@ -77,10 +83,13 @@ public class ProductController {
     }
 
     @GetMapping("/provider/{providerId}")
-    public String providerProducts(@PathVariable Long providerId, Model model, RedirectAttributes ra) {
+    public String providerProducts(@PathVariable Long providerId, Model model, RedirectAttributes ra, Locale locale) {
         try {
+            String lang = locale.getLanguage();
+            List<ItemDto> items = itemClient.getItemsByProvider(providerId);
+            items.forEach(i -> i.localize(lang));
             model.addAttribute("provider", providerClient.getProviderById(providerId));
-            model.addAttribute("items", itemClient.getItemsByProvider(providerId));
+            model.addAttribute("items", items);
             return "provider-products";
         } catch (WebClientResponseException.NotFound e) {
             ra.addFlashAttribute("error", "Provider not found.");

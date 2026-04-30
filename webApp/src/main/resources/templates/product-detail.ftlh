@@ -5,8 +5,8 @@
 
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Home</a></li>
-            <li class="breadcrumb-item"><a href="/products" class="text-decoration-none">Products</a></li>
+            <li class="breadcrumb-item"><a href="/" class="text-decoration-none">${springMacroRequestContext.getMessage('common.home')}</a></li>
+            <li class="breadcrumb-item"><a href="/products" class="text-decoration-none">${springMacroRequestContext.getMessage('common.products')}</a></li>
             <#if item.category??><li class="breadcrumb-item"><a href="/products?category=${item.category}" class="text-decoration-none">${item.category}</a></li></#if>
             <li class="breadcrumb-item active">${item.name}</li>
         </ol>
@@ -68,18 +68,18 @@
 
             <div class="d-flex align-items-end gap-3 mb-3">
                 <span class="display-6 fw-bold">₪${item.price}</span>
-                <span class="text-muted mb-2">per ${item.unit!"unit"}</span>
+                <span class="text-muted mb-2">${springMacroRequestContext.getMessage('product.per')} ${item.unit!"unit"}</span>
             </div>
 
             <#if item.quantity?? && item.quantity gt 0>
-            <p class="text-success fw-semibold"><i class="bi bi-check-circle-fill me-1"></i>In Stock &mdash; ${item.quantity} ${item.unit!"unit"}(s) available</p>
+            <p class="text-success fw-semibold"><i class="bi bi-check-circle-fill me-1"></i>${springMacroRequestContext.getMessage('common.in_stock')} &mdash; ${item.quantity} ${item.unit!"unit"}(s)</p>
             <#else>
-            <p class="text-danger fw-semibold"><i class="bi bi-x-circle-fill me-1"></i>Out of Stock</p>
+            <p class="text-danger fw-semibold"><i class="bi bi-x-circle-fill me-1"></i>${springMacroRequestContext.getMessage('common.out_of_stock')}</p>
             </#if>
 
             <ul class="list-unstyled mb-4">
-                <#if item.type??><li><span class="text-muted">Type:</span> <strong>${item.type}</strong></li></#if>
-                <#if item.serialNumber??><li><span class="text-muted">Serial No:</span> <strong>${item.serialNumber}</strong></li></#if>
+                <#if item.type??><li><span class="text-muted">${springMacroRequestContext.getMessage('product.type')}:</span> <strong>${item.type}</strong></li></#if>
+                <#if item.serialNumber??><li><span class="text-muted">${springMacroRequestContext.getMessage('product.serial')}:</span> <strong>${item.serialNumber}</strong></li></#if>
             </ul>
 
             <#if item.quantity?? && item.quantity gt 0>
@@ -87,13 +87,13 @@
                 <input type="number" name="quantity" value="1" min="1" max="${item.quantity}"
                        class="form-control w-25" />
                 <button type="submit" class="btn btn-warning btn-lg flex-grow-1">
-                    <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                    <i class="bi bi-cart-plus me-2"></i>${springMacroRequestContext.getMessage('product.add_to_cart')}
                 </button>
             </form>
             </#if>
             <#if currentUser?? && currentUser.canEdit(item)>
             <a href="/items/${item.id?c}/edit" class="btn btn-outline-secondary mt-3">
-                <i class="bi bi-pencil me-1"></i>Edit Item
+                <i class="bi bi-pencil me-1"></i>${springMacroRequestContext.getMessage('product.edit')}
             </a>
             </#if>
         </div>
@@ -101,7 +101,7 @@
 
     <#if providerItems?? && providerItems?has_content>
     <section class="mt-5">
-        <h4 class="fw-bold mb-4">More from this Store</h4>
+        <h4 class="fw-bold mb-4">${springMacroRequestContext.getMessage('product.more_from_store')}</h4>
         <div class="row g-4">
             <#list providerItems as related>
             <div class="col-6 col-md-3">
@@ -116,10 +116,10 @@
                     </#if>
                     <div class="card-body">
                         <h6 class="card-title">${related.name}</h6>
-                        <span class="fw-bold">$${related.price}</span>
+                        <span class="fw-bold">₪${related.price}</span>
                     </div>
                     <div class="card-footer bg-white border-top-0 pb-3">
-                        <a href="/products/${related.id?c}" class="btn btn-outline-dark btn-sm w-100">View</a>
+                        <a href="/products/${related.id?c}" class="btn btn-outline-dark btn-sm w-100">${springMacroRequestContext.getMessage('common.view')}</a>
                     </div>
                 </div>
             </div>

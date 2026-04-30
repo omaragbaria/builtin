@@ -1,5 +1,5 @@
 <#import "layout/main.ftlh" as layout>
-<@layout.main pageTitle="Products">
+<@layout.main pageTitle="${springMacroRequestContext.getMessage('common.products')}">
 
 <div class="container my-5">
     <#if success??>
@@ -20,13 +20,13 @@
         <div class="col-lg-3">
             <div class="card shadow-sm sticky-top" style="top: 80px;">
                 <div class="card-body">
-                    <h5 class="fw-bold mb-3"><i class="bi bi-funnel me-2"></i>Filters</h5>
+                    <h5 class="fw-bold mb-3"><i class="bi bi-funnel me-2"></i>${springMacroRequestContext.getMessage('products.filters')}</h5>
 
                     <form method="get" action="/products" id="filterForm">
                         <input type="hidden" name="view" value="${view!'card'}">
 
                         <!-- Price Range -->
-                        <h6 class="text-muted text-uppercase fw-semibold mb-2">Price Range</h6>
+                        <h6 class="text-muted text-uppercase fw-semibold mb-2">${springMacroRequestContext.getMessage('products.filters.price_range')}</h6>
                         <div class="mb-1">
                             <label class="form-label small text-muted">
                                 ₪<span id="minVal">${(minPrice??)?then(minPrice, 0)}</span>
@@ -35,14 +35,14 @@
                             </label>
                         </div>
                         <div class="mb-1">
-                            <label class="form-label small">Min</label>
+                            <label class="form-label small">${springMacroRequestContext.getMessage('products.filters.min')}</label>
                             <input type="range" class="form-range" id="minSlider" name="minPrice"
                                    min="0" max="${globalMax}" step="10"
                                    value="${(minPrice??)?then(minPrice, 0)}"
                                    oninput="updateRange()">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small">Max</label>
+                            <label class="form-label small">${springMacroRequestContext.getMessage('products.filters.max')}</label>
                             <input type="range" class="form-range" id="maxSlider" name="maxPrice"
                                    min="0" max="${globalMax}" step="10"
                                    value="${(maxPrice??)?then(maxPrice, globalMax)}"
@@ -53,13 +53,13 @@
 
                         <!-- Category -->
                         <#if categories?? && categories?has_content>
-                        <h6 class="text-muted text-uppercase fw-semibold mb-2">Category</h6>
+                        <h6 class="text-muted text-uppercase fw-semibold mb-2">${springMacroRequestContext.getMessage('products.filters.category')}</h6>
                         <div class="list-group list-group-flush mb-3" style="max-height:260px;overflow-y:auto;">
                             <label class="list-group-item list-group-item-action d-flex align-items-center gap-2 py-2">
                                 <input class="form-check-input" type="radio" name="category" value=""
                                        <#if !selectedCategory?? || selectedCategory == "">checked</#if>
                                        onchange="this.form.submit()">
-                                <span>All Categories</span>
+                                <span>${springMacroRequestContext.getMessage('products.filters.all_categories')}</span>
                             </label>
                             <#list categories as cat>
                             <label class="list-group-item list-group-item-action d-flex align-items-center gap-2 py-2">
@@ -73,10 +73,10 @@
                         </#if>
 
                         <button type="submit" class="btn btn-dark w-100 btn-sm">
-                            <i class="bi bi-search me-1"></i>Apply Filters
+                            <i class="bi bi-search me-1"></i>${springMacroRequestContext.getMessage('products.filters.apply')}
                         </button>
                         <a href="/products" class="btn btn-outline-secondary w-100 btn-sm mt-2">
-                            <i class="bi bi-x-circle me-1"></i>Clear
+                            <i class="bi bi-x-circle me-1"></i>${springMacroRequestContext.getMessage('products.filters.clear')}
                         </a>
                     </form>
                 </div>
@@ -88,13 +88,13 @@
             <!-- Toolbar -->
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                 <h4 class="fw-bold mb-0">
-                    <#if selectedCategory??>${selectedCategory}<#else>All Products</#if>
-                    <small class="text-muted fs-6 ms-2">(${items?size} items)</small>
+                    <#if selectedCategory??>${selectedCategory}<#else>${springMacroRequestContext.getMessage('products.all')}</#if>
+                    <small class="text-muted fs-6 ms-2">(${items?size})</small>
                 </h4>
                 <div class="d-flex align-items-center gap-2">
                     <#if currentUser?? && currentUser.canAddItems()>
                     <a href="/items/new" class="btn btn-dark btn-sm">
-                        <i class="bi bi-plus-circle me-1"></i>Add Item
+                        <i class="bi bi-plus-circle me-1"></i>${springMacroRequestContext.getMessage('nav.add_item')}
                     </a>
                     </#if>
                     <!-- View toggle -->
@@ -138,7 +138,7 @@
                             </div>
                         </div>
                         <div class="card-footer bg-white border-top-0 pb-3">
-                            <a href="/products/${item.id?c}" class="btn btn-dark btn-sm w-100">View Details</a>
+                            <a href="/products/${item.id?c}" class="btn btn-dark btn-sm w-100">${springMacroRequestContext.getMessage('common.view_details')}</a>
                         </div>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
                             </#if>
                         </div>
                         <div class="flex-grow-1 min-width-0">
-                            <#if item.serialNumber??><small class="text-muted">מק"ט ${item.serialNumber}</small></#if>
+                            <#if item.serialNumber??><small class="text-muted">${springMacroRequestContext.getMessage('product.serial')} ${item.serialNumber}</small></#if>
                             <h6 class="mb-1 fw-semibold">${item.name}</h6>
                             <#if item.type??><small class="text-muted">${item.type}</small></#if>
                             <#if item.provider??><div><small class="text-muted"><i class="bi bi-shop me-1"></i>${item.provider.name}</small></div></#if>
@@ -169,7 +169,7 @@
                         <div class="text-end flex-shrink-0">
                             <div class="fw-bold fs-5 text-dark">₪${item.price}</div>
                             <small class="text-muted d-block">${item.unit!"UNIT"}</small>
-                            <a href="/products/${item.id?c}" class="btn btn-dark btn-sm mt-2">View</a>
+                            <a href="/products/${item.id?c}" class="btn btn-dark btn-sm mt-2">${springMacroRequestContext.getMessage('common.view')}</a>
                         </div>
                     </div>
                 </div>
@@ -180,8 +180,8 @@
             <#else>
             <div class="text-center py-5">
                 <i class="bi bi-search fs-1 text-muted"></i>
-                <p class="mt-3 text-muted">No products found.</p>
-                <a href="/products" class="btn btn-dark">Browse All</a>
+                <p class="mt-3 text-muted">${springMacroRequestContext.getMessage('common.no_products')}</p>
+                <a href="/products" class="btn btn-dark">${springMacroRequestContext.getMessage('common.browse_all')}</a>
             </div>
             </#if>
         </div>

@@ -95,3 +95,65 @@
 2. Feature 1 — AI Agent ✅ (done)
 3. Feature 3 — Mobile Scaffolding ✅ (done)
 4. Feature 4 — Construction Materials Calculator ✅ (done)
+5. Feature 5 — Product Catalog Restructure ✅ (done)
+6. Feature 6 — Multilingual Support 🔄 (in progress)
+
+
+
+---
+
+## Feature 5: Product Catalog Restructure (from products_en.xlsx)
+
+**Goal:** Rebuild the product catalog to match the updated `products_en.xlsx` file. Each sheet in the file represents a category. Update the Product model with proper enums, seed all products, and clear stale data.
+
+**Key rules from the spreadsheet:**
+- Price is per unit/carton/package (as defined in the "Qty per Carton" or "Qty per Package" column)
+- Color is a product attribute — use `N/A` if not applicable
+- Use enums for repeating properties: categories, colors, units, shipping time, etc.
+
+### Categories (one sheet per category)
+| Sheet | Category |
+|-------|----------|
+| Sealing and Adhesives | Sealants & Adhesives |
+| Paints, Sprays, Cleaning | Paints, Sprays & Cleaning |
+| Cutting and Grinding | Cutting & Grinding Discs |
+| Polishing and Sanding | Polishing & Sanding |
+| Ceramics and Tiling | Ceramics, Grout & Tiling |
+| Plasterboard | Plasterboard & Drywall |
+| Cement and Adhesives | Cement & Adhesives |
+| Iron Metal | Iron & Metal |
+
+### Tasks
+
+- [x] **5.1** Define enums — `ItemCategory` (8 values), `ItemColor` (18 values incl. NA)
+- [x] **5.2** Update the `Item` model — `category` (ItemCategory enum), `color` (ItemColor, default NA), `qtyPerPackage`, `customerPrice`, `contractorPrice`
+- [x] **5.3** Clear all existing products and providers from the database (via `DataInitializer` on startup)
+- [x] **5.4** Write `ProductSeederService` — reads all 8 sheets from `products_en.xlsx`, maps columns dynamically, extracts color per category, evaluates Excel formulas
+- [ ] **5.5** Verify seeded data — each category has the correct products, prices, and color values
+
+---
+
+## Feature 6: Multilingual Support
+
+**Goal:** Make the entire application multilingual. Users can switch the language from the top bar. All UI text and product data (names, descriptions) are translated. Default language is English.
+
+### Supported Languages
+| Language | Flag | Locale | Direction |
+|----------|------|--------|-----------|
+| English | 🇺🇸 US | `en` | LTR |
+| Arabic | 🇸🇦 Saudi Arabia | `ar` | RTL |
+| Hebrew | 🇮🇱 Israel | `he` | RTL |
+| Russian | 🇷🇺 Russia | `ru` | LTR |
+| Chinese | 🇨🇳 China | `zh` | LTR |
+
+### Tasks
+
+- [x] **6.1** Set up Spring MessageSource + SessionLocaleResolver with `?lang=xx` switching and English fallback
+- [x] **6.2** Add language switcher to the navbar — flag emoji + dropdown for all 5 languages
+- [x] **6.3** Create translation files for all 5 locales — `messages.properties`, `messages_ar.properties`, `messages_he.properties`, `messages_ru.properties`, `messages_zh.properties`
+- [x] **6.4** Add RTL layout support — detect `ar` / `he` locales, set `dir="rtl"` on `<html>`, load `rtl.css`
+- [x] **6.5** Add `nameAr`, `nameHe`, `nameRu`, `nameZh` fields to the backend `Item` model
+- [x] **6.6** Update `ProductSeederService` to set translated names (English fallback for now)
+- [x] **6.7** Webapp controllers localise `ItemDto.name` before passing to templates using locale from `SessionLocaleResolver`
+- [x] **6.8** Language persisted in HTTP session via `SessionLocaleResolver` — survives page refresh automatically
+- [ ] **6.9** QA pass — verify all 5 languages render correctly, RTL layouts are intact, and no hardcoded English strings remain
