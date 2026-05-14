@@ -41,6 +41,9 @@ public class Deal {
     @Column(name = "shipping_method")
     private ShippingMethod shippingMethod;
 
+    @Column(name = "shipping_cost", precision = 10, scale = 2)
+    private BigDecimal shippingCost;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

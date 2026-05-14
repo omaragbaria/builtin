@@ -63,7 +63,7 @@
                 <div class="card-body">
                     <h5 class="fw-bold mb-3">${springMacroRequestContext.getMessage('cart.summary')}</h5>
                     <hr/>
-                    <div class="d-flex justify-content-between mb-2">
+                    <div class="d-flex justify-content-between mb-3">
                         <span class="text-muted">${springMacroRequestContext.getMessage('cart.subtotal')} (${cart?size})</span>
                         <span>₪${total}</span>
                     </div>
@@ -72,41 +72,83 @@
                     <div class="mb-3">
                         <label class="form-label fw-semibold">${springMacroRequestContext.getMessage('cart.shipping')}</label>
 
-                        <div class="form-check border rounded p-2 mb-2 shipping-option" id="opt-immediate">
+                        <!-- Self Pickup -->
+                        <div class="form-check border rounded p-2 mb-2 shipping-option" id="opt-pickup" data-fee="0">
+                            <input class="form-check-input" type="radio" name="shippingMethod"
+                                   id="shipping-pickup" value="SELF_PICKUP">
+                            <label class="form-check-label w-100" for="shipping-pickup">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <i class="bi bi-shop text-success me-1"></i>
+                                        <strong>${springMacroRequestContext.getMessage('cart.pickup_delivery')}</strong>
+                                        <div class="text-muted small">${springMacroRequestContext.getMessage('cart.pickup_badge')}</div>
+                                        <div class="text-muted small fst-italic"><i class="bi bi-archive me-1"></i>${springMacroRequestContext.getMessage('cart.pickup_packaging')}</div>
+                                    </div>
+                                    <span class="text-success fw-bold ms-2">${springMacroRequestContext.getMessage('cart.free')}</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Express 24h -->
+                        <div class="form-check border rounded p-2 mb-2 shipping-option" id="opt-immediate" data-fee="49.90">
                             <input class="form-check-input" type="radio" name="shippingMethod"
                                    id="shipping-immediate" value="IMMEDIATE">
                             <label class="form-check-label w-100" for="shipping-immediate">
-                                <i class="bi bi-lightning-fill text-warning me-1"></i>
-                                <strong>${springMacroRequestContext.getMessage('cart.immediate_delivery')}</strong>
-                                <div class="text-muted small">${springMacroRequestContext.getMessage('cart.immediate_badge')}</div>
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <i class="bi bi-lightning-fill text-warning me-1"></i>
+                                        <strong>${springMacroRequestContext.getMessage('cart.immediate_delivery')}</strong>
+                                        <div class="text-muted small">${springMacroRequestContext.getMessage('cart.immediate_badge')}</div>
+                                        <div class="text-muted small fst-italic"><i class="bi bi-archive me-1"></i>${springMacroRequestContext.getMessage('cart.immediate_packaging')}</div>
+                                    </div>
+                                    <span class="fw-bold ms-2">₪49.90</span>
+                                </div>
                             </label>
                         </div>
 
-                        <div class="form-check border rounded p-2 mb-2 shipping-option" id="opt-fast">
+                        <!-- Fast 2-5 days -->
+                        <div class="form-check border rounded p-2 mb-2 shipping-option" id="opt-fast" data-fee="29.90">
                             <input class="form-check-input" type="radio" name="shippingMethod"
                                    id="shipping-fast" value="FAST" checked>
                             <label class="form-check-label w-100" for="shipping-fast">
-                                <i class="bi bi-truck text-primary me-1"></i>
-                                <strong>${springMacroRequestContext.getMessage('cart.fast_delivery')}</strong>
-                                <div class="text-muted small">${springMacroRequestContext.getMessage('cart.fast_badge')}</div>
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <i class="bi bi-truck text-primary me-1"></i>
+                                        <strong>${springMacroRequestContext.getMessage('cart.fast_delivery')}</strong>
+                                        <div class="text-muted small">${springMacroRequestContext.getMessage('cart.fast_badge')}</div>
+                                        <div class="text-muted small fst-italic"><i class="bi bi-archive me-1"></i>${springMacroRequestContext.getMessage('cart.fast_packaging')}</div>
+                                    </div>
+                                    <span class="fw-bold ms-2">₪29.90</span>
+                                </div>
                             </label>
                         </div>
 
-                        <div class="form-check border rounded p-2 mb-2 shipping-option" id="opt-standard">
+                        <!-- Economy up to 14 days -->
+                        <div class="form-check border rounded p-2 mb-2 shipping-option" id="opt-standard" data-fee="9.90">
                             <input class="form-check-input" type="radio" name="shippingMethod"
                                    id="shipping-standard" value="STANDARD">
                             <label class="form-check-label w-100" for="shipping-standard">
-                                <i class="bi bi-box-seam text-secondary me-1"></i>
-                                <strong>${springMacroRequestContext.getMessage('cart.standard_delivery')}</strong>
-                                <div class="text-muted small">${springMacroRequestContext.getMessage('cart.standard_badge')}</div>
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <i class="bi bi-box-seam text-secondary me-1"></i>
+                                        <strong>${springMacroRequestContext.getMessage('cart.standard_delivery')}</strong>
+                                        <div class="text-muted small">${springMacroRequestContext.getMessage('cart.standard_badge')}</div>
+                                        <div class="text-muted small fst-italic"><i class="bi bi-archive me-1"></i>${springMacroRequestContext.getMessage('cart.standard_packaging')}</div>
+                                    </div>
+                                    <span class="fw-bold ms-2">₪9.90</span>
+                                </div>
                             </label>
                         </div>
                     </div>
 
                     <hr/>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">${springMacroRequestContext.getMessage('cart.shipping_fee')}</span>
+                        <span id="shipping-cost-display">₪29.90</span>
+                    </div>
                     <div class="d-flex justify-content-between fw-bold fs-5 mb-4">
                         <span>${springMacroRequestContext.getMessage('cart.total')}</span>
-                        <span>₪${total}</span>
+                        <span id="total-display">₪${total}</span>
                     </div>
                     <button class="btn btn-warning w-100 btn-lg fw-bold" onclick="placeOrder()">
                         <i class="bi bi-bag-check me-2"></i>${springMacroRequestContext.getMessage('cart.checkout')}
@@ -131,14 +173,31 @@
 </div>
 
 <script>
+const subtotal = parseFloat('${total}');
+const shippingFees = { SELF_PICKUP: 0, IMMEDIATE: 49.90, FAST: 29.90, STANDARD: 9.90 };
+
+function updateTotal() {
+    const method = document.querySelector('input[name="shippingMethod"]:checked');
+    if (!method) return;
+    const fee = shippingFees[method.value] ?? 0;
+    document.getElementById('shipping-cost-display').textContent =
+        fee === 0 ? '${springMacroRequestContext.getMessage("cart.free")}' : '₪' + fee.toFixed(2);
+    document.getElementById('total-display').textContent = '₪' + (subtotal + fee).toFixed(2);
+}
+
 document.querySelectorAll('input[name="shippingMethod"]').forEach(radio => {
     radio.addEventListener('change', function() {
         document.querySelectorAll('.shipping-option').forEach(el => el.classList.remove('border-primary', 'bg-light'));
         this.closest('.shipping-option').classList.add('border-primary', 'bg-light');
+        updateTotal();
     });
 });
+
 const checked = document.querySelector('input[name="shippingMethod"]:checked');
-if (checked) checked.closest('.shipping-option').classList.add('border-primary', 'bg-light');
+if (checked) {
+    checked.closest('.shipping-option').classList.add('border-primary', 'bg-light');
+    updateTotal();
+}
 
 function placeOrder() {
     const method = document.querySelector('input[name="shippingMethod"]:checked');
