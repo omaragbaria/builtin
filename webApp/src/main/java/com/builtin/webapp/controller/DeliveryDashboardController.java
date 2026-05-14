@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/deliveries")
@@ -32,8 +34,15 @@ public class DeliveryDashboardController {
             List<DeliveryDto> mine = accountId != null ? deliveryClient.getByAccount(accountId) : List.of();
             model.addAttribute("pendingDeliveries", pending);
             model.addAttribute("myDeliveries", mine);
+
         } else if ("SUPER_ADMIN".equals(role)) {
-            model.addAttribute("allDeliveries", deliveryClient.getAll());
+            List<DeliveryDto> all = deliveryClient.getAll();
+            Map<String, Long> stageCounts = all.stream()
+                    .filter(d -> d.getStage() != null)
+                    .collect(Collectors.groupingBy(DeliveryDto::getStage, Collectors.counting()));
+            model.addAttribute("allDeliveries", all);
+            model.addAttribute("stageCounts", stageCounts);
+
         } else {
             return "redirect:/";
         }
@@ -42,19 +51,17 @@ public class DeliveryDashboardController {
         return "delivery-dashboard";
     }
 
+    // ── Delivery account actions ──────────────────────────────────────────
+
     @PostMapping("/{id}/accept")
-    public String accept(@PathVariable Long id,
-                         HttpSession session,
-                         RedirectAttributes ra) {
+    public String accept(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
         UserDto user = (UserDto) session.getAttribute("currentUser");
         if (user == null || !"DELIVERY".equals(user.getUserType())) return "redirect:/auth/login";
-
         Long accountId = user.getDeliveryAccountId();
         if (accountId == null) {
             ra.addFlashAttribute("error", "Your delivery account ID could not be resolved.");
             return "redirect:/deliveries";
         }
-
         try {
             deliveryClient.accept(id, accountId);
             ra.addFlashAttribute("message", "Package accepted successfully.");
@@ -65,13 +72,10 @@ public class DeliveryDashboardController {
     }
 
     @PostMapping("/{id}/stage")
-    public String updateStage(@PathVariable Long id,
-                              @RequestParam String stage,
-                              HttpSession session,
-                              RedirectAttributes ra) {
+    public String updateStage(@PathVariable Long id, @RequestParam String stage,
+                              HttpSession session, RedirectAttributes ra) {
         UserDto user = (UserDto) session.getAttribute("currentUser");
         if (user == null || !"DELIVERY".equals(user.getUserType())) return "redirect:/auth/login";
-
         try {
             deliveryClient.updateStage(id, stage);
             ra.addFlashAttribute("message", "Stage updated to " + stage.replace("_", " ").toLowerCase() + ".");
@@ -82,13 +86,10 @@ public class DeliveryDashboardController {
     }
 
     @PostMapping("/{id}/eta")
-    public String updateEta(@PathVariable Long id,
-                            @RequestParam String eta,
-                            HttpSession session,
-                            RedirectAttributes ra) {
+    public String updateEta(@PathVariable Long id, @RequestParam String eta,
+                            HttpSession session, RedirectAttributes ra) {
         UserDto user = (UserDto) session.getAttribute("currentUser");
         if (user == null || !"DELIVERY".equals(user.getUserType())) return "redirect:/auth/login";
-
         try {
             deliveryClient.updateEta(id, eta);
             ra.addFlashAttribute("message", "ETA updated.");
@@ -96,5 +97,26 @@ public class DeliveryDashboardController {
             ra.addFlashAttribute("error", "Could not update ETA: " + e.getMessage());
         }
         return "redirect:/deliveries";
+    }
+
+    // ── Customer order tracking ───────────────────────────────────────────
+
+    @GetMapping("/track")
+    public String trackForm(Model model, HttpSession session) {
+        model.addAttribute("currentUser", session.getAttribute("currentUser"));
+        return "order-tracking";
+    }
+
+    @GetMapping("/track/{dealId}")
+    public String trackOrder(@PathVariable Long dealId, Model model, HttpSession session) {
+        model.addAttribute("currentUser", session.getAttribute("currentUser"));
+        model.addAttribute("dealId", dealId);
+        DeliveryDto delivery = deliveryClient.getByDeal(dealId);
+        if (delivery != null) {
+            model.addAttribute("delivery", delivery);
+        } else {
+            model.addAttribute("notFound", true);
+        }
+        return "order-tracking";
     }
 }

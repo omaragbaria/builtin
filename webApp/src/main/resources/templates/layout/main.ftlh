@@ -59,6 +59,13 @@
                     </a>
                 </li>
                 </#if>
+                <#if currentUser?? && currentUser.userType == "CUSTOMER">
+                <li class="nav-item">
+                    <a class="nav-link" href="/deliveries/track">
+                        <i class="bi bi-search me-1"></i>Track Order
+                    </a>
+                </li>
+                </#if>
                 <li class="nav-item">
                     <a class="btn btn-outline-warning btn-sm" href="/cart">
                         <i class="bi bi-cart3 fs-5"></i>

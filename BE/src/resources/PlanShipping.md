@@ -65,10 +65,10 @@ Allow delivery accounts to manage packages assigned to them.
 Expose delivery status information to relevant parties.
 
 **Subtasks:**
-- [ ] 4.1 Customer view: show current stage, ETA, and delivery details for their order
-- [ ] 4.2 Admin view: show all active deliveries with stage, ETA, and assigned delivery account
-- [ ] 4.3 Delivery account view: show their assigned packages and allow stage/ETA updates
-- [ ] 4.4 Real-time or polling updates when stage or ETA changes
+- [x] 4.1 Customer view: show current stage, ETA, and delivery details for their order
+- [x] 4.2 Admin view: show all active deliveries with stage, ETA, and assigned delivery account
+- [x] 4.3 Delivery account view: show their assigned packages and allow stage/ETA updates
+- [x] 4.4 Real-time or polling updates when stage or ETA changes
 
 ---
 

@@ -67,4 +67,16 @@ public class DeliveryClient {
                 .bodyToMono(DeliveryDto.class)
                 .block();
     }
+
+    public DeliveryDto getByDeal(Long dealId) {
+        try {
+            return webClient.get()
+                    .uri("/deliveries/deal/{dealId}", dealId)
+                    .retrieve()
+                    .bodyToMono(DeliveryDto.class)
+                    .block();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }
