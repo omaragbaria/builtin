@@ -52,6 +52,13 @@
                     </a>
                 </li>
                 </#if>
+                <#if currentUser?? && (currentUser.userType == "DELIVERY" || currentUser.userType == "SUPER_ADMIN")>
+                <li class="nav-item">
+                    <a class="nav-link" href="/deliveries">
+                        <i class="bi bi-truck me-1"></i>Deliveries
+                    </a>
+                </li>
+                </#if>
                 <li class="nav-item">
                     <a class="btn btn-outline-warning btn-sm" href="/cart">
                         <i class="bi bi-cart3 fs-5"></i>

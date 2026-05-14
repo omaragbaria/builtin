@@ -51,12 +51,12 @@ Introduce a new `DeliveryAccount` user type that extends the base `User` model.
 Allow delivery accounts to manage packages assigned to them.
 
 **Subtasks:**
-- [ ] 3.1 Accept a package that is waiting for a delivery assignment
-- [ ] 3.2 Update package delivery stage:
+- [x] 3.1 Accept a package that is waiting for a delivery assignment
+- [x] 3.2 Update package delivery stage:
   - `Accepted`
   - `In Delivery`
   - `Arrived`
-- [ ] 3.3 Set / update ETA for the delivery
+- [x] 3.3 Set / update ETA for the delivery
 
 ---
 

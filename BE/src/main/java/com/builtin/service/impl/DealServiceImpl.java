@@ -10,7 +10,9 @@ import com.builtin.repository.DealRepository;
 import com.builtin.repository.ItemRepository;
 import com.builtin.repository.UserRepository;
 import com.builtin.service.DealService;
+import com.builtin.service.DeliveryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,6 +25,8 @@ public class DealServiceImpl implements DealService {
     private final DealRepository dealRepository;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    @Lazy
+    private final DeliveryService deliveryService;
 
     @Override
     public List<Deal> getAllDeals() {
@@ -95,6 +99,11 @@ public class DealServiceImpl implements DealService {
         Deal saved = dealRepository.save(deal);
         items.forEach(item -> item.setDeal(saved));
         itemRepository.saveAll(items);
+
+        if (request.getShippingMethod() != ShippingMethod.SELF_PICKUP) {
+            deliveryService.createForDeal(saved);
+        }
+
         return saved;
     }
 
