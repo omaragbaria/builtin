@@ -1,5 +1,6 @@
 package com.builtin.webapp.controller;
 
+import com.builtin.webapp.client.DeliveryAccountClient;
 import com.builtin.webapp.client.ProviderClient;
 import com.builtin.webapp.dto.ProviderDto;
 import com.builtin.webapp.dto.UserDto;
@@ -27,10 +28,12 @@ public class AuthController {
             "user",     "CUSTOMER",
             "provider", "PROVIDER",
             "admin",    "SUPER_ADMIN",
-            "patara",   "PROVIDER"
+            "patara",   "PROVIDER",
+            "dlv",      "DELIVERY"
     );
 
     private final ProviderClient providerClient;
+    private final DeliveryAccountClient deliveryAccountClient;
 
     @GetMapping("/login")
     public String loginForm() {
@@ -64,6 +67,14 @@ public class AuthController {
                         .filter(p -> "Patara".equalsIgnoreCase(p.getName()))
                         .findFirst()
                         .ifPresent(p -> user.setProviderId(p.getId()));
+            } catch (Exception ignored) {}
+        }
+
+        // For delivery logins, resolve the delivery account ID from the DB
+        if ("DELIVERY".equals(type)) {
+            try {
+                deliveryAccountClient.findByEmail(user.getEmail())
+                        .ifPresent(da -> user.setDeliveryAccountId(da.getId()));
             } catch (Exception ignored) {}
         }
 

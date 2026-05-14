@@ -10,6 +10,7 @@ public class UserDto {
     private String email;
     private String userType;
     private Long providerId;
+    private Long deliveryAccountId;
 
     public boolean canAddItems() {
         return "PROVIDER".equals(userType) || "SUPER_ADMIN".equals(userType);

@@ -73,7 +73,12 @@
 
             <p class="text-center text-muted small mt-3">
                 <i class="bi bi-info-circle me-1"></i>
-                Use <strong>user</strong>, <strong>provider</strong>, or <strong>admin</strong> with password <strong>1234</strong>
+                Use <strong>user</strong>, <strong>provider</strong>, <strong>admin</strong>, or <strong>dlv</strong> with password <strong>1234</strong>
+            </p>
+            <p class="text-center small mt-1">
+                <a href="/delivery/register" class="text-decoration-none">
+                    <i class="bi bi-truck me-1"></i>Register as a delivery partner
+                </a>
             </p>
         </div>
     </div>

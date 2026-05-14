@@ -28,11 +28,11 @@ Allow customers to choose a shipping method when placing an order.
 Introduce a new `DeliveryAccount` user type that extends the base `User` model.
 
 **Subtasks:**
-- [ ] 2.1 Extend the `User` model with a `DeliveryAccount` type
-- [ ] 2.2 Add account subtype field: `company` or `freelance`
-- [ ] 2.3 For **company** accounts: support assigning multiple drivers (name + phone number per driver)
-- [ ] 2.4 For **freelance** accounts: single driver profile (name + phone number)
-- [ ] 2.5 Add vehicle type field with the following options:
+- [x] 2.1 Extend the `User` model with a `DeliveryAccount` type
+- [x] 2.2 Add account subtype field: `company` or `freelance`
+- [x] 2.3 For **company** accounts: support assigning multiple drivers (name + phone number per driver)
+- [x] 2.4 For **freelance** accounts: single driver profile (name + phone number)
+- [x] 2.5 Add vehicle type field with the following options:
   - Bike
   - Motorbike
   - Normal car
@@ -42,7 +42,7 @@ Introduce a new `DeliveryAccount` user type that extends the base `User` model.
   - Fridge truck
   - Mixed truck
   - Truck with winch
-- [ ] 2.6 Add authentication & registration flow for delivery accounts
+- [x] 2.6 Add authentication & registration flow for delivery accounts
 
 ---
 
