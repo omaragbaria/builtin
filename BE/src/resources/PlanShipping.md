@@ -77,7 +77,7 @@ Expose delivery status information to relevant parties.
 Build the delivery tracking page accessible to all three roles.
 
 **Subtasks:**
-- [ ] 5.1 Design and implement the delivery status page
-- [ ] 5.2 Role-based rendering (customer / admin / delivery account)
-- [ ] 5.3 Display package details, current stage, and ETA
-- [ ] 5.4 Add stage update controls for delivery accounts
+- [x] 5.1 Design and implement the delivery status page
+- [x] 5.2 Role-based rendering (customer / admin / delivery account)
+- [x] 5.3 Display package details, current stage, and ETA
+- [x] 5.4 Add stage update controls for delivery accounts

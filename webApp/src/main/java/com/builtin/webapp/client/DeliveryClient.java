@@ -79,4 +79,16 @@ public class DeliveryClient {
             return null;
         }
     }
+
+    public DeliveryDto getById(Long id) {
+        try {
+            return webClient.get()
+                    .uri("/deliveries/{id}", id)
+                    .retrieve()
+                    .bodyToMono(DeliveryDto.class)
+                    .block();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

@@ -1,7 +1,9 @@
 package com.builtin.webapp.controller;
 
+import com.builtin.webapp.client.DealClient;
 import com.builtin.webapp.client.DeliveryClient;
 import com.builtin.webapp.dto.DeliveryDto;
+import com.builtin.webapp.dto.ItemDto;
 import com.builtin.webapp.dto.UserDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class DeliveryDashboardController {
 
     private final DeliveryClient deliveryClient;
+    private final DealClient dealClient;
 
     @GetMapping
     public String dashboard(HttpSession session, Model model) {
@@ -97,6 +100,22 @@ public class DeliveryDashboardController {
             ra.addFlashAttribute("error", "Could not update ETA: " + e.getMessage());
         }
         return "redirect:/deliveries";
+    }
+
+    // ── Delivery detail page (5.1 – 5.4) ─────────────────────────────────
+
+    @GetMapping("/{id}")
+    public String viewDetail(@PathVariable Long id, Model model, HttpSession session) {
+        UserDto user = (UserDto) session.getAttribute("currentUser");
+        DeliveryDto delivery = deliveryClient.getById(id);
+        if (delivery == null) return "redirect:/deliveries/track";
+
+        List<ItemDto> items = dealClient.getDealItems(delivery.getDealId());
+
+        model.addAttribute("delivery", delivery);
+        model.addAttribute("items", items);
+        model.addAttribute("currentUser", user);
+        return "delivery-detail";
     }
 
     // ── Customer order tracking ───────────────────────────────────────────

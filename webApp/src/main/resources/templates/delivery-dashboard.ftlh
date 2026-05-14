@@ -130,11 +130,16 @@
               <i class="bi bi-calendar3 me-1"></i>${d.createdAt!?string}
             </div>
           </div>
-          <form method="post" action="/deliveries/${d.id}/accept">
-            <button type="submit" class="btn btn-success">
-              <i class="bi bi-check-circle me-1"></i>Accept Package
-            </button>
-          </form>
+          <div class="d-flex gap-2">
+            <a href="/deliveries/${d.id}" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-eye me-1"></i>Details
+            </a>
+            <form method="post" action="/deliveries/${d.id}/accept">
+              <button type="submit" class="btn btn-success">
+                <i class="bi bi-check-circle me-1"></i>Accept Package
+              </button>
+            </form>
+          </div>
         </div>
       </div>
       </#list>
@@ -187,6 +192,13 @@
 
         <!-- Stage timeline -->
         <@stageTimeline d.stage!"" />
+
+        <!-- Detail link -->
+        <div class="mt-2">
+          <a href="/deliveries/${d.id}" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-box-arrow-up-right me-1"></i>View Full Details
+          </a>
+        </div>
 
         <!-- Controls (hidden for ARRIVED) -->
         <#if d.stage != "ARRIVED">
@@ -313,8 +325,8 @@
               <td class="fw-semibold">₪${d.dealTotal!""}</td>
               <td><span class="badge bg-light text-dark border">${d.dealShippingMethod!""}</span></td>
               <td>
-                <a href="/deliveries/track/${d.dealId}" class="btn btn-outline-secondary btn-sm">
-                  <i class="bi bi-search"></i>
+                <a href="/deliveries/${d.id}" class="btn btn-outline-primary btn-sm" title="View details">
+                  <i class="bi bi-eye"></i>
                 </a>
               </td>
             </tr>

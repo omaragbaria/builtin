@@ -138,6 +138,13 @@
       </div>
       </#if>
 
+      <!-- Link to full detail page -->
+      <div class="mt-3">
+        <a href="/deliveries/${delivery.id}" class="btn btn-primary w-100">
+          <i class="bi bi-box-arrow-up-right me-2"></i>View Full Package Details
+        </a>
+      </div>
+
       <!-- Auto-refresh notice (4.4) -->
       <div class="d-flex align-items-center justify-content-between text-muted small mt-3">
         <span><i class="bi bi-arrow-clockwise me-1"></i>Page refreshes in <span id="trackCountdown">30</span>s</span>
