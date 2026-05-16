@@ -101,10 +101,10 @@ Integrate real-time GPS-based tracking so customers can follow their parcel on a
 Add a new shipping option — **Immediate** — that automatically assigns the order to the nearest available driver based on the delivery address, with no manual acceptance step.
 
 **Subtasks:**
-- [ ] 7.1 Add `Immediate` as a selectable shipping method at checkout
-- [ ] 7.2 On order placement, calculate which available driver is geographically closest to the delivery address using GPS coordinates
-- [ ] 7.3 Automatically push the package assignment to that driver
-- [ ] 7.4 Handle the case where no nearby driver is available: notify the customer and offer alternative shipping methods
+- [x] 7.1 Add `Immediate` as a selectable shipping method at checkout
+- [x] 7.2 On order placement, calculate which available driver is geographically closest to the delivery address using GPS coordinates
+- [x] 7.3 Automatically push the package assignment to that driver
+- [x] 7.4 Handle the case where no nearby driver is available: notify the customer and offer alternative shipping methods
 
 ---
 

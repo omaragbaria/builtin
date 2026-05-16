@@ -17,6 +17,9 @@ public class CheckoutRequest {
     @NotNull
     private List<CheckoutItem> items;
 
+    private Double deliveryLatitude;
+    private Double deliveryLongitude;
+
     @Data
     public static class CheckoutItem {
         private Long itemId;

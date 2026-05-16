@@ -18,4 +18,5 @@ public interface DeliveryService {
     List<DeliveryResponseDto> getByAccount(Long deliveryAccountId);
     List<DeliveryResponseDto> getAll();
     Optional<DeliveryResponseDto> findByDealId(Long dealId);
+    void autoAssignNearest(Long deliveryId, Double deliveryLat, Double deliveryLng);
 }

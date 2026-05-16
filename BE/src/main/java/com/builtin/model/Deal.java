@@ -44,6 +44,12 @@ public class Deal {
     @Column(name = "shipping_cost", precision = 10, scale = 2)
     private BigDecimal shippingCost;
 
+    @Column(name = "delivery_latitude")
+    private Double deliveryLatitude;
+
+    @Column(name = "delivery_longitude")
+    private Double deliveryLongitude;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

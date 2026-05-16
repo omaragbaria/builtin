@@ -1,6 +1,7 @@
 package com.builtin.service.impl;
 
 import com.builtin.dto.CheckoutRequest;
+import com.builtin.dto.DeliveryResponseDto;
 import com.builtin.exception.ResourceNotFoundException;
 import com.builtin.model.Deal;
 import com.builtin.model.DealStatus;
@@ -14,6 +15,8 @@ import com.builtin.service.DeliveryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -73,6 +76,7 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
+    @Transactional
     public Deal checkout(CheckoutRequest request) {
         List<Item> items = request.getItems().stream()
                 .map(ci -> itemRepository.findById(ci.getItemId())
@@ -90,7 +94,9 @@ public class DealServiceImpl implements DealService {
                 .status(DealStatus.PENDING_APPROVAL)
                 .shippingMethod(request.getShippingMethod())
                 .shippingCost(shippingCost)
-                .totalPrice(total);
+                .totalPrice(total)
+                .deliveryLatitude(request.getDeliveryLatitude())
+                .deliveryLongitude(request.getDeliveryLongitude());
         if (request.getUserId() != null) {
             builder.user(userRepository.getReferenceById(request.getUserId()));
         }
@@ -101,7 +107,11 @@ public class DealServiceImpl implements DealService {
         itemRepository.saveAll(items);
 
         if (request.getShippingMethod() != ShippingMethod.SELF_PICKUP) {
-            deliveryService.createForDeal(saved);
+            DeliveryResponseDto delivery = deliveryService.createForDeal(saved);
+            if (request.getShippingMethod() == ShippingMethod.IMMEDIATE) {
+                deliveryService.autoAssignNearest(delivery.getId(),
+                        request.getDeliveryLatitude(), request.getDeliveryLongitude());
+            }
         }
 
         return saved;

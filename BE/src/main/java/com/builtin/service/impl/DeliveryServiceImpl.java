@@ -11,8 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -97,6 +99,41 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public Optional<DeliveryResponseDto> findByDealId(Long dealId) {
         return deliveryRepository.findByDealId(dealId).map(this::toDto);
+    }
+
+    @Override
+    public void autoAssignNearest(Long deliveryId, Double deliveryLat, Double deliveryLng) {
+        List<DeliveryAccount> candidates = deliveryAccountRepository.findByLatitudeIsNotNullAndLongitudeIsNotNull();
+        Set<Long> busyIds = Set.copyOf(deliveryRepository.findActiveDriverAccountIds(
+                List.of(DeliveryStage.ACCEPTED, DeliveryStage.IN_DELIVERY)));
+
+        DeliveryAccount nearest = candidates.stream()
+                .filter(da -> !busyIds.contains(da.getId()))
+                .min(Comparator.comparingDouble(da ->
+                        haversineKm(deliveryLat, deliveryLng, da.getLatitude(), da.getLongitude())))
+                .orElseThrow(() -> new IllegalStateException(
+                        "No drivers are currently available for immediate pickup. " +
+                        "Please try again shortly or choose another shipping method."));
+
+        Delivery delivery = findEntity(deliveryId);
+        delivery.setDeliveryAccount(nearest);
+        delivery.setStage(DeliveryStage.ACCEPTED);
+        delivery.setAssignedAt(LocalDateTime.now());
+
+        Deal deal = delivery.getDeal();
+        deal.setStatus(DealStatus.DELIVERY);
+        dealRepository.save(deal);
+        deliveryRepository.save(delivery);
+    }
+
+    private double haversineKm(double lat1, double lon1, double lat2, double lon2) {
+        final double R = 6371.0;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                 + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                 * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
     private Delivery findEntity(Long id) {

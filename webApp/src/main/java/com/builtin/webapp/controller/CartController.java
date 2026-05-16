@@ -103,6 +103,8 @@ public class CartController {
 
     @GetMapping("/checkout")
     public String checkout(@RequestParam String shippingMethod,
+                           @RequestParam(required = false) Double deliveryLat,
+                           @RequestParam(required = false) Double deliveryLng,
                            HttpSession session,
                            RedirectAttributes redirectAttributes) {
         List<CartItemDto> cart = getCart(session);
@@ -120,10 +122,21 @@ public class CartController {
         CheckoutRequestDto request = new CheckoutRequestDto(
                 currentUser != null ? currentUser.getId() : null,
                 shippingMethod,
-                items
+                items,
+                deliveryLat,
+                deliveryLng
         );
 
-        dealClient.checkout(request);
+        try {
+            dealClient.checkout(request);
+        } catch (Exception e) {
+            String msg = "IMMEDIATE".equals(shippingMethod)
+                    ? "No drivers are currently available nearby. Please try again shortly or choose another shipping method."
+                    : "Could not place your order. Please try again.";
+            redirectAttributes.addFlashAttribute("checkoutError", msg);
+            return "redirect:/cart";
+        }
+
         session.removeAttribute("cart");
         redirectAttributes.addFlashAttribute("message", "Order placed successfully!");
         return "redirect:/products";

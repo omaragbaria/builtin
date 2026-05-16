@@ -13,6 +13,8 @@ public class CheckoutRequestDto {
     private Long userId;
     private String shippingMethod;
     private List<CheckoutItemDto> items;
+    private Double deliveryLatitude;
+    private Double deliveryLongitude;
 
     @Data
     @NoArgsConstructor

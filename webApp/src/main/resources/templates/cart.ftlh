@@ -4,6 +4,13 @@
 <div class="container my-5">
     <h2 class="fw-bold mb-4"><i class="bi bi-cart3 me-2"></i>${springMacroRequestContext.getMessage('cart.title')}</h2>
 
+    <#if checkoutError??>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>${checkoutError}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    </#if>
+
     <#if cart?? && cart?has_content>
     <div class="row g-4">
 
@@ -89,7 +96,7 @@
                             </label>
                         </div>
 
-                        <!-- Express 24h -->
+                        <!-- Immediate (auto-assigned to nearest driver) -->
                         <div class="form-check border rounded p-2 mb-2 shipping-option" id="opt-immediate" data-fee="49.90">
                             <input class="form-check-input" type="radio" name="shippingMethod"
                                    id="shipping-immediate" value="IMMEDIATE">
@@ -100,10 +107,20 @@
                                         <strong>${springMacroRequestContext.getMessage('cart.immediate_delivery')}</strong>
                                         <div class="text-muted small">${springMacroRequestContext.getMessage('cart.immediate_badge')}</div>
                                         <div class="text-muted small fst-italic"><i class="bi bi-archive me-1"></i>${springMacroRequestContext.getMessage('cart.immediate_packaging')}</div>
+                                        <div class="text-primary small mt-1"><i class="bi bi-geo-alt-fill me-1"></i>Auto-assigned to the nearest available driver</div>
                                     </div>
                                     <span class="fw-bold ms-2">₪49.90</span>
                                 </div>
                             </label>
+                            <!-- Location capture — shown when this option is selected -->
+                            <div id="immediate-location-section" class="mt-2 pt-2 border-top" style="display:none;">
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <button type="button" class="btn btn-sm btn-outline-warning" onclick="captureLocation()">
+                                        <i class="bi bi-crosshair me-1"></i>Use My Location
+                                    </button>
+                                    <span id="location-status" class="small text-muted">Location not captured yet</span>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Fast 2-5 days -->
@@ -175,6 +192,7 @@
 <script>
 const subtotal = parseFloat('${total}');
 const shippingFees = { SELF_PICKUP: 0, IMMEDIATE: 49.90, FAST: 29.90, STANDARD: 9.90 };
+let immediateCoords = null;
 
 function updateTotal() {
     const method = document.querySelector('input[name="shippingMethod"]:checked');
@@ -185,10 +203,40 @@ function updateTotal() {
     document.getElementById('total-display').textContent = '₪' + (subtotal + fee).toFixed(2);
 }
 
+function captureLocation() {
+    const status = document.getElementById('location-status');
+    if (!navigator.geolocation) {
+        status.textContent = 'Geolocation not supported by your browser.';
+        status.className = 'small text-danger';
+        return;
+    }
+    status.textContent = 'Getting your location…';
+    status.className = 'small text-muted';
+    navigator.geolocation.getCurrentPosition(
+        pos => {
+            immediateCoords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            status.textContent = 'Location ready ✓';
+            status.className = 'small text-success fw-semibold';
+        },
+        () => {
+            status.textContent = 'Location access denied — please allow it or choose another method.';
+            status.className = 'small text-danger';
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+    );
+}
+
 document.querySelectorAll('input[name="shippingMethod"]').forEach(radio => {
     radio.addEventListener('change', function() {
         document.querySelectorAll('.shipping-option').forEach(el => el.classList.remove('border-primary', 'bg-light'));
         this.closest('.shipping-option').classList.add('border-primary', 'bg-light');
+        const locationSection = document.getElementById('immediate-location-section');
+        if (this.value === 'IMMEDIATE') {
+            locationSection.style.display = 'block';
+            captureLocation();
+        } else {
+            locationSection.style.display = 'none';
+        }
         updateTotal();
     });
 });
@@ -202,7 +250,15 @@ if (checked) {
 function placeOrder() {
     const method = document.querySelector('input[name="shippingMethod"]:checked');
     if (!method) { alert('Please select a shipping method.'); return; }
-    window.location.href = '/cart/checkout?shippingMethod=' + method.value;
+    if (method.value === 'IMMEDIATE') {
+        if (!immediateCoords) {
+            alert('Your location is still needed. Please click "Use My Location" and allow access.');
+            return;
+        }
+        window.location.href = '/cart/checkout?shippingMethod=IMMEDIATE&deliveryLat=' + immediateCoords.lat + '&deliveryLng=' + immediateCoords.lng;
+    } else {
+        window.location.href = '/cart/checkout?shippingMethod=' + method.value;
+    }
 }
 </script>
 
