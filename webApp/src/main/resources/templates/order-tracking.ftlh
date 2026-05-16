@@ -1,5 +1,9 @@
 <#import "layout/main.ftlh" as layout>
 <@layout.main pageTitle="Track Your Order">
+<#assign showMap = (delivery?? && delivery.stage == "IN_DELIVERY" && delivery.driverLatitude?? && delivery.driverLongitude??)>
+<#if showMap>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+</#if>
 
 <div class="container my-5">
   <div class="row justify-content-center">
@@ -106,6 +110,23 @@
         </div>
       </div>
 
+      <!-- Live GPS map (6.3) -->
+      <#if showMap>
+      <div class="card shadow-sm mb-3 border-primary border-opacity-50">
+        <div class="card-header bg-primary bg-opacity-10">
+          <h6 class="fw-bold mb-0 text-uppercase small text-primary">
+            <i class="bi bi-geo-alt-fill me-2"></i>Live Driver Location
+          </h6>
+        </div>
+        <div class="card-body p-0">
+          <div id="trackingMap" style="height:240px;border-radius:0 0 .375rem .375rem;"></div>
+        </div>
+        <div class="card-footer text-muted small py-1">
+          <i class="bi bi-arrow-clockwise me-1"></i>Updates every 30 s with page refresh
+        </div>
+      </div>
+      </#if>
+
       <!-- Courier info -->
       <#if delivery.deliveryAccountName?has_content>
       <div class="card shadow-sm mb-3">
@@ -157,6 +178,9 @@
   </div>
 </div>
 
+<#if showMap>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</#if>
 <script>
 // Redirect track form to the correct URL
 document.getElementById('trackForm')?.addEventListener('submit', function(e) {
@@ -181,6 +205,22 @@ setInterval(() => {
     if (cntEl) cntEl.textContent = secs;
     if (secs <= 0) location.reload();
 }, 1000);
+</#if>
+
+<#if showMap>
+(function () {
+    const lat = ${delivery.driverLatitude?c};
+    const lng = ${delivery.driverLongitude?c};
+    const map = L.map('trackingMap').setView([lat, lng], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19
+    }).addTo(map);
+    L.marker([lat, lng])
+        .addTo(map)
+        .bindPopup('<strong>Your courier is on the way</strong>')
+        .openPopup();
+})();
 </#if>
 </script>
 

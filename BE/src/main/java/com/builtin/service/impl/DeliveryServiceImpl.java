@@ -130,7 +130,9 @@ public class DeliveryServiceImpl implements DeliveryService {
              .deliveryAccountName(da.getFirstName() + " " + da.getLastName())
              .deliveryAccountEmail(da.getEmail())
              .vehicleType(da.getVehicleType() != null ? da.getVehicleType().name() : null)
-             .deliveryAccountType(da.getDeliveryAccountType() != null ? da.getDeliveryAccountType().name() : null);
+             .deliveryAccountType(da.getDeliveryAccountType() != null ? da.getDeliveryAccountType().name() : null)
+             .driverLatitude(da.getLatitude())
+             .driverLongitude(da.getLongitude());
         }
 
         return b.build();

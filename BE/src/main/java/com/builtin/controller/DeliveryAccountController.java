@@ -1,6 +1,7 @@
 package com.builtin.controller;
 
 import com.builtin.dto.CreateDeliveryAccountRequest;
+import com.builtin.dto.UpdateLocationRequest;
 import com.builtin.model.DeliveryAccount;
 import com.builtin.model.Driver;
 import com.builtin.service.DeliveryAccountService;
@@ -62,6 +63,13 @@ public class DeliveryAccountController {
     @DeleteMapping("/{id}/drivers/{driverId}")
     public ResponseEntity<Void> removeDriver(@PathVariable Long id, @PathVariable Long driverId) {
         deliveryAccountService.removeDriver(id, driverId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/location")
+    public ResponseEntity<Void> updateLocation(@PathVariable Long id,
+                                               @RequestBody UpdateLocationRequest request) {
+        deliveryAccountService.updateLocation(id, request.getLatitude(), request.getLongitude());
         return ResponseEntity.noContent().build();
     }
 }

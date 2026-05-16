@@ -23,4 +23,6 @@ public class DeliveryDto {
     private String deliveryAccountEmail;
     private String vehicleType;
     private String deliveryAccountType;
+    private Double driverLatitude;
+    private Double driverLongitude;
 }

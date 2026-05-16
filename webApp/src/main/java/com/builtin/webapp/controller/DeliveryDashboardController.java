@@ -1,12 +1,14 @@
 package com.builtin.webapp.controller;
 
 import com.builtin.webapp.client.DealClient;
+import com.builtin.webapp.client.DeliveryAccountClient;
 import com.builtin.webapp.client.DeliveryClient;
 import com.builtin.webapp.dto.DeliveryDto;
 import com.builtin.webapp.dto.ItemDto;
 import com.builtin.webapp.dto.UserDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ public class DeliveryDashboardController {
 
     private final DeliveryClient deliveryClient;
     private final DealClient dealClient;
+    private final DeliveryAccountClient deliveryAccountClient;
 
     @GetMapping
     public String dashboard(HttpSession session, Model model) {
@@ -100,6 +103,23 @@ public class DeliveryDashboardController {
             ra.addFlashAttribute("error", "Could not update ETA: " + e.getMessage());
         }
         return "redirect:/deliveries";
+    }
+
+    // ── GPS location update (6.2) — called by driver's browser JS ─────────
+
+    @PostMapping(value = "/location", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<Void> updateLocation(@RequestBody Map<String, Double> body, HttpSession session) {
+        UserDto user = (UserDto) session.getAttribute("currentUser");
+        if (user == null || !"DELIVERY".equals(user.getUserType())) return ResponseEntity.status(401).build();
+        Long accountId = user.getDeliveryAccountId();
+        if (accountId == null) return ResponseEntity.badRequest().build();
+        try {
+            deliveryAccountClient.updateLocation(accountId, body.get("lat"), body.get("lng"));
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     // ── Delivery detail page (5.1 – 5.4) ─────────────────────────────────

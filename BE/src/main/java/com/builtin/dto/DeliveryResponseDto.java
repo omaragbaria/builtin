@@ -32,4 +32,6 @@ public class DeliveryResponseDto {
     private String deliveryAccountEmail;
     private String vehicleType;
     private String deliveryAccountType;
+    private Double driverLatitude;
+    private Double driverLongitude;
 }

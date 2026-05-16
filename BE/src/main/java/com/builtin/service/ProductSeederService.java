@@ -28,17 +28,8 @@ public class ProductSeederService {
     @Transactional
     public void seed() {
         log.info("Starting product seeding from products_en.xlsx...");
-        clearDatabase();
         loadFromXlsx();
         log.info("Seeding complete. Total items: {}", itemRepository.count());
-    }
-
-    private void clearDatabase() {
-        jdbcTemplate.update("UPDATE users SET provider_id = NULL WHERE provider_id IS NOT NULL");
-        jdbcTemplate.update("DELETE FROM item_photos");
-        jdbcTemplate.update("DELETE FROM items");
-        jdbcTemplate.update("DELETE FROM providers");
-        log.info("Database cleared.");
     }
 
     private void loadFromXlsx() {
@@ -88,6 +79,10 @@ public class ProductSeederService {
             if (price == null) price = BigDecimal.ZERO;
 
             String sku  = getString(row, skuCol, evaluator);
+
+            // Skip if already in DB (preserves photos and stock)
+            if (sku != null && !sku.isBlank() && itemRepository.findBySerialNumber(sku).isPresent()) continue;
+
             String desc = descCol >= 0 ? getString(row, descCol, evaluator) : null;
             String grit = gritCol >= 0 ? getString(row, gritCol, evaluator) : null;
 
@@ -117,7 +112,7 @@ public class ProductSeederService {
                     .customerPrice(getBigDecimal(row, custCol, evaluator))
                     .contractorPrice(getBigDecimal(row, contrCol, evaluator))
                     .unit(unit)
-                    .quantity(0)
+                    .quantity(10)
                     .type(category.name())
                     .shippingTime("STANDARD")
                     .build();

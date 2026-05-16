@@ -66,9 +66,9 @@ public class ItemPhotoController {
 
     @GetMapping("/api/photos/{filename}")
     public ResponseEntity<byte[]> servePhoto(@PathVariable String filename) throws IOException {
-        Path filePath = Paths.get(uploadDir).resolve(filename).normalize();
+        Path filePath = Paths.get(uploadDir).resolve(filename).normalize().toAbsolutePath();
         // Prevent path traversal
-        if (!filePath.startsWith(Paths.get(uploadDir).toAbsolutePath())) {
+        if (!filePath.startsWith(Paths.get(uploadDir).toAbsolutePath().normalize())) {
             return ResponseEntity.badRequest().build();
         }
         if (!Files.exists(filePath)) {

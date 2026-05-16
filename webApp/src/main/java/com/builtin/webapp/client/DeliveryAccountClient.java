@@ -54,4 +54,13 @@ public class DeliveryAccountClient {
                 .bodyToMono(DeliveryAccountDto.class)
                 .block();
     }
+
+    public void updateLocation(Long accountId, Double lat, Double lng) {
+        webClient.patch()
+                .uri("/delivery-accounts/{id}/location", accountId)
+                .bodyValue(Map.of("latitude", lat, "longitude", lng))
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+    }
 }

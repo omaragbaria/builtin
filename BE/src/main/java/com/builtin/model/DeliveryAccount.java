@@ -2,6 +2,7 @@ package com.builtin.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,12 @@ public class DeliveryAccount extends User {
     @OneToMany(mappedBy = "deliveryAccount", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Driver> drivers = new ArrayList<>();
+
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
 
     @PrePersist
     private void setDeliveryUserType() {

@@ -81,3 +81,54 @@ Build the delivery tracking page accessible to all three roles.
 - [x] 5.2 Role-based rendering (customer / admin / delivery account)
 - [x] 5.3 Display package details, current stage, and ETA
 - [x] 5.4 Add stage update controls for delivery accounts
+
+---
+
+## Task 6 — GPS Parcel Tracking
+
+Integrate real-time GPS-based tracking so customers can follow their parcel on a live map.
+
+**Subtasks:**
+- [x] 6.1 Integrate a mapping library for live parcel tracking (Google Maps preferred; fall back to an alternative if not feasible)
+- [x] 6.2 Expose the driver's current GPS coordinates from the delivery account in real time
+- [x] 6.3 Display the live map on the customer's delivery tracking page, showing the driver's current position and the destination
+- [x] 6.4 Keep the driver's position updated periodically while the delivery is in progress (polling or WebSocket)
+
+---
+
+## Task 7 — Immediate Pickup Mode
+
+Add a new shipping option — **Immediate** — that automatically assigns the order to the nearest available driver based on the delivery address, with no manual acceptance step.
+
+**Subtasks:**
+- [ ] 7.1 Add `Immediate` as a selectable shipping method at checkout
+- [ ] 7.2 On order placement, calculate which available driver is geographically closest to the delivery address using GPS coordinates
+- [ ] 7.3 Automatically push the package assignment to that driver
+- [ ] 7.4 Handle the case where no nearby driver is available: notify the customer and offer alternative shipping methods
+
+---
+
+## Task 8 — Item & Provider Location Management
+
+Attach structured location data to both items and providers, so the system knows where stock physically exists. This is a prerequisite for proximity-based driver assignment in Task 7.
+
+**Subtasks:**
+- [ ] 8.1 Add a `locations` array field to the **Provider** model. Each entry represents a branch or storage site and includes: `country`, `city`, `zipCode`, `gpsCoordinates` (lat/lng), and an optional `label`
+- [ ] 8.2 Add the same `locations` array field to the **Item** model
+- [ ] 8.3 When a new item is created, default its location to the adding provider's primary location
+- [ ] 8.4 Allow providers to edit item locations and assign one or more of their registered locations to each item
+- [ ] 8.5 Surface item location data to the nearest-driver calculation used in Task 7
+
+---
+
+## Task 9 — Multi-Provider Pricing per Item
+
+Replace the single item price with a structured price list, supporting multiple providers offering the same item at different prices tied to specific delivery timeframes.
+
+**Subtasks:**
+- [ ] 9.1 Replace the single `price` field on Item with a `prices` array. Each entry contains: `amount`, `currency`, `deliveryTime` (e.g. `"Express – 24h"`, `"Standard – 2–5 days"`), and `providerId`
+- [ ] 9.2 Apply the following display rules in the item listing UI:
+  - If only one price exists → show it as-is
+  - If multiple prices exist → show the lowest price prominently, with its corresponding delivery timeframe displayed beneath it in smaller text
+- [ ] 9.3 At checkout, filter the price list to show only entries that match the customer's selected shipping method
+- [ ] 9.4 Persist the selected provider's price and delivery timeframe on the order record

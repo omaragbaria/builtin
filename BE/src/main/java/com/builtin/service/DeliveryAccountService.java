@@ -16,4 +16,5 @@ public interface DeliveryAccountService {
     Driver addDriver(Long id, CreateDeliveryAccountRequest.DriverRequest driverRequest);
     void removeDriver(Long accountId, Long driverId);
     Optional<DeliveryAccount> findByEmail(String email);
+    void updateLocation(Long id, Double latitude, Double longitude);
 }

@@ -356,6 +356,23 @@ setInterval(() => {
     if (seconds <= 0) location.reload();
 }, 1000);
 
+// ── GPS location broadcast (6.2) — active while driver has IN_DELIVERY packages ──
+<#if currentUser.userType == "DELIVERY" && inDeliveryCount?? && (inDeliveryCount > 0)>
+(function () {
+    if (!navigator.geolocation) return;
+    const send = (lat, lng) => fetch('/deliveries/location', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lat, lng })
+    }).catch(() => {});
+    navigator.geolocation.watchPosition(
+        pos => send(pos.coords.latitude, pos.coords.longitude),
+        null,
+        { enableHighAccuracy: true, maximumAge: 15000, timeout: 10000 }
+    );
+})();
+</#if>
+
 // ── Admin filter tabs ──────────────────────────────────────────────────
 document.querySelectorAll('#stageTabs .nav-link').forEach(tab => {
     tab.addEventListener('click', e => {

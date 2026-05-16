@@ -101,4 +101,12 @@ public class DeliveryAccountServiceImpl implements DeliveryAccountService {
     public Optional<DeliveryAccount> findByEmail(String email) {
         return deliveryAccountRepository.findByEmail(email);
     }
+
+    @Override
+    public void updateLocation(Long id, Double latitude, Double longitude) {
+        DeliveryAccount account = getById(id);
+        account.setLatitude(latitude);
+        account.setLongitude(longitude);
+        deliveryAccountRepository.save(account);
+    }
 }
