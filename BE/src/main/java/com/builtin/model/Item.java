@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "items")
@@ -88,5 +90,14 @@ public class Item {
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private java.util.List<ItemPhoto> photos = new java.util.ArrayList<>();
+    private List<ItemPhoto> photos = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "item_locations",
+        joinColumns = @JoinColumn(name = "item_id"),
+        inverseJoinColumns = @JoinColumn(name = "provider_location_id")
+    )
+    @Builder.Default
+    private List<ProviderLocation> locations = new ArrayList<>();
 }

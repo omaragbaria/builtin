@@ -2,12 +2,16 @@ package com.builtin.service.impl;
 
 import com.builtin.exception.ResourceNotFoundException;
 import com.builtin.model.Item;
+import com.builtin.model.ProviderLocation;
 import com.builtin.repository.ItemRepository;
+import com.builtin.repository.ProviderLocationRepository;
 import com.builtin.repository.ProviderRepository;
 import com.builtin.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,6 +20,7 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final ProviderRepository providerRepository;
+    private final ProviderLocationRepository providerLocationRepository;
 
     @Override
     public List<Item> getAllItems() {
@@ -34,9 +39,20 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public Item createItem(Item item) {
         resolveProvider(item);
-        return itemRepository.save(item);
+        Long providerId = item.getProvider() != null ? item.getProvider().getId() : null;
+        Item saved = itemRepository.save(item);
+        // 8.3: default item location to the provider's first (primary) location
+        if (providerId != null) {
+            List<ProviderLocation> providerLocs = providerLocationRepository.findByProviderId(providerId);
+            if (!providerLocs.isEmpty()) {
+                saved.getLocations().add(providerLocs.get(0));
+                itemRepository.save(saved);
+            }
+        }
+        return saved;
     }
 
     @Override
@@ -64,5 +80,16 @@ public class ItemServiceImpl implements ItemService {
     public void deleteItem(Long id) {
         getItemById(id);
         itemRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void setLocations(Long itemId, List<Long> providerLocationIds) {
+        Item item = getItemById(itemId);
+        List<ProviderLocation> locations = providerLocationIds == null || providerLocationIds.isEmpty()
+                ? new ArrayList<>()
+                : providerLocationRepository.findAllById(providerLocationIds);
+        item.setLocations(new ArrayList<>(locations));
+        itemRepository.save(item);
     }
 }

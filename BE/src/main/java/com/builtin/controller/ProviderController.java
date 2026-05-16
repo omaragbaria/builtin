@@ -2,6 +2,7 @@ package com.builtin.controller;
 
 import com.builtin.model.Item;
 import com.builtin.model.Provider;
+import com.builtin.model.ProviderLocation;
 import com.builtin.model.User;
 import com.builtin.service.ProviderService;
 import jakarta.validation.Valid;
@@ -53,5 +54,22 @@ public class ProviderController {
     @GetMapping("/{id}/users")
     public ResponseEntity<List<User>> getProviderUsers(@PathVariable Long id) {
         return ResponseEntity.ok(providerService.getProviderUsers(id));
+    }
+
+    @GetMapping("/{id}/locations")
+    public ResponseEntity<List<ProviderLocation>> getLocations(@PathVariable Long id) {
+        return ResponseEntity.ok(providerService.getLocations(id));
+    }
+
+    @PostMapping("/{id}/locations")
+    public ResponseEntity<ProviderLocation> addLocation(@PathVariable Long id,
+                                                        @RequestBody ProviderLocation location) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(providerService.addLocation(id, location));
+    }
+
+    @DeleteMapping("/{id}/locations/{locationId}")
+    public ResponseEntity<Void> deleteLocation(@PathVariable Long id, @PathVariable Long locationId) {
+        providerService.deleteLocation(id, locationId);
+        return ResponseEntity.noContent().build();
     }
 }

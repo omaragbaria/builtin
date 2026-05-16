@@ -12,4 +12,5 @@ public class ProviderDto {
     private String phone;
     private String email;
     private List<ItemDto> items;
+    private List<ProviderLocationDto> locations;
 }

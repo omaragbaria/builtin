@@ -113,11 +113,11 @@ Add a new shipping option — **Immediate** — that automatically assigns the o
 Attach structured location data to both items and providers, so the system knows where stock physically exists. This is a prerequisite for proximity-based driver assignment in Task 7.
 
 **Subtasks:**
-- [ ] 8.1 Add a `locations` array field to the **Provider** model. Each entry represents a branch or storage site and includes: `country`, `city`, `zipCode`, `gpsCoordinates` (lat/lng), and an optional `label`
-- [ ] 8.2 Add the same `locations` array field to the **Item** model
-- [ ] 8.3 When a new item is created, default its location to the adding provider's primary location
-- [ ] 8.4 Allow providers to edit item locations and assign one or more of their registered locations to each item
-- [ ] 8.5 Surface item location data to the nearest-driver calculation used in Task 7
+- [x] 8.1 Add a `locations` array field to the **Provider** model. Each entry represents a branch or storage site and includes: `country`, `city`, `zipCode`, `gpsCoordinates` (lat/lng), and an optional `label`
+- [x] 8.2 Add the same `locations` array field to the **Item** model
+- [x] 8.3 When a new item is created, default its location to the adding provider's primary location
+- [x] 8.4 Allow providers to edit item locations and assign one or more of their registered locations to each item
+- [x] 8.5 Surface item location data to the nearest-driver calculation used in Task 7
 
 ---
 

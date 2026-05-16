@@ -89,6 +89,16 @@ public class ItemClient {
                 .block();
     }
 
+    public void setItemLocations(Long itemId, List<Long> locationIds) {
+        webClient.put()
+                .uri("/items/{id}/locations", itemId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(locationIds)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+    }
+
     public List<ItemDto> searchItems(String query) {
         return getAllItems().stream()
                 .filter(item -> item.getName().toLowerCase().contains(query.toLowerCase())

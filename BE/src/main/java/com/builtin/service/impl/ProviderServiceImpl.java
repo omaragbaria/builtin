@@ -3,8 +3,10 @@ package com.builtin.service.impl;
 import com.builtin.exception.ResourceNotFoundException;
 import com.builtin.model.Item;
 import com.builtin.model.Provider;
+import com.builtin.model.ProviderLocation;
 import com.builtin.model.User;
 import com.builtin.repository.ItemRepository;
+import com.builtin.repository.ProviderLocationRepository;
 import com.builtin.repository.ProviderRepository;
 import com.builtin.repository.UserRepository;
 import com.builtin.service.ProviderService;
@@ -18,6 +20,7 @@ import java.util.List;
 public class ProviderServiceImpl implements ProviderService {
 
     private final ProviderRepository providerRepository;
+    private final ProviderLocationRepository providerLocationRepository;
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
@@ -63,5 +66,28 @@ public class ProviderServiceImpl implements ProviderService {
     public List<User> getProviderUsers(Long id) {
         getProviderById(id);
         return userRepository.findByProviderId(id);
+    }
+
+    @Override
+    public List<ProviderLocation> getLocations(Long providerId) {
+        getProviderById(providerId);
+        return providerLocationRepository.findByProviderId(providerId);
+    }
+
+    @Override
+    public ProviderLocation addLocation(Long providerId, ProviderLocation location) {
+        Provider provider = getProviderById(providerId);
+        location.setProvider(provider);
+        return providerLocationRepository.save(location);
+    }
+
+    @Override
+    public void deleteLocation(Long providerId, Long locationId) {
+        ProviderLocation loc = providerLocationRepository.findById(locationId)
+                .orElseThrow(() -> new ResourceNotFoundException("ProviderLocation", locationId));
+        if (!loc.getProvider().getId().equals(providerId)) {
+            throw new IllegalArgumentException("Location does not belong to this provider");
+        }
+        providerLocationRepository.deleteById(locationId);
     }
 }

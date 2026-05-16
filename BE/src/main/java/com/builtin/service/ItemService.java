@@ -11,4 +11,5 @@ public interface ItemService {
     Item createItem(Item item);
     Item updateItem(Long id, Item item);
     void deleteItem(Long id);
+    void setLocations(Long itemId, List<Long> providerLocationIds);
 }

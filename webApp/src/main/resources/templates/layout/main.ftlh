@@ -59,6 +59,13 @@
                     </a>
                 </li>
                 </#if>
+                <#if currentUser?? && currentUser.userType == "PROVIDER">
+                <li class="nav-item">
+                    <a class="nav-link" href="/providers/locations">
+                        <i class="bi bi-geo-alt me-1"></i>My Locations
+                    </a>
+                </li>
+                </#if>
                 <#if currentUser?? && currentUser.userType == "CUSTOMER">
                 <li class="nav-item">
                     <a class="nav-link" href="/deliveries/track">

@@ -47,4 +47,10 @@ public class ItemController {
         itemService.deleteItem(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}/locations")
+    public ResponseEntity<Void> setLocations(@PathVariable Long id, @RequestBody List<Long> locationIds) {
+        itemService.setLocations(id, locationIds);
+        return ResponseEntity.noContent().build();
+    }
 }

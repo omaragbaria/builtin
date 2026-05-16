@@ -4,6 +4,7 @@ import com.builtin.webapp.client.ItemClient;
 import com.builtin.webapp.client.ProviderClient;
 import com.builtin.webapp.dto.CreateItemRequest;
 import com.builtin.webapp.dto.ItemDto;
+import com.builtin.webapp.dto.ProviderLocationDto;
 import com.builtin.webapp.dto.UserDto;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/items")
@@ -105,6 +108,17 @@ public class ItemFormController {
         if ("SUPER_ADMIN".equals(user.getUserType())) {
             model.addAttribute("providers", providerClient.getAllProviders());
         }
+        // 8.4: load provider locations for selection
+        Long providerId = item.getProvider() != null ? item.getProvider().getId()
+                : user.getProviderId();
+        if (providerId != null) {
+            List<ProviderLocationDto> providerLocations = providerClient.getLocations(providerId);
+            Set<Long> selectedLocationIds = item.getLocations() != null
+                    ? item.getLocations().stream().map(ProviderLocationDto::getId).collect(Collectors.toSet())
+                    : Set.of();
+            model.addAttribute("providerLocations", providerLocations);
+            model.addAttribute("selectedLocationIds", selectedLocationIds);
+        }
         return "edit-item";
     }
 
@@ -112,6 +126,7 @@ public class ItemFormController {
     public String updateItem(@PathVariable Long id,
                              @ModelAttribute CreateItemRequest item,
                              @RequestParam(value = "photos", required = false) List<MultipartFile> photos,
+                             @RequestParam(value = "locationIds", required = false) List<Long> locationIds,
                              HttpSession session,
                              RedirectAttributes ra) {
         UserDto user = (UserDto) session.getAttribute("currentUser");
@@ -124,6 +139,8 @@ public class ItemFormController {
         }
         try {
             itemClient.updateItem(id, item);
+            // 8.4: persist selected locations
+            itemClient.setItemLocations(id, locationIds != null ? locationIds : List.of());
             if (photos != null) {
                 List<MultipartFile> nonEmpty = photos.stream().filter(f -> !f.isEmpty()).toList();
                 if (!nonEmpty.isEmpty()) {

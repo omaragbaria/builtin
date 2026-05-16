@@ -22,6 +22,7 @@ public class ItemDto {
     private ProviderDto provider;
     private List<PhotoDto> photos;
     private String shippingTime;
+    private List<ProviderLocationDto> locations;
 
     public void localize(String lang) {
         String translated = switch (lang) {

@@ -82,6 +82,48 @@
                             </div>
                             </#if>
 
+                            <#-- 8.4: item stock locations -->
+                            <#if providerLocations?? && providerLocations?has_content>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">
+                                    <i class="bi bi-geo-alt me-1"></i>Stock Locations
+                                </label>
+                                <div class="border rounded p-3 bg-light">
+                                    <div class="text-muted small mb-2">Select which of your branches carry this item.</div>
+                                    <#list providerLocations as loc>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                               name="locationIds" value="${loc.id}"
+                                               id="loc-${loc.id}"
+                                               <#if selectedLocationIds?? && selectedLocationIds?seq_contains(loc.id)>checked</#if>>
+                                        <label class="form-check-label" for="loc-${loc.id}">
+                                            <strong>${loc.label!loc.city!""}</strong>
+                                            <#if loc.city?has_content || loc.country?has_content>
+                                            <span class="text-muted small ms-1">
+                                                — <#if loc.city?has_content>${loc.city}</#if><#if loc.country?has_content>, ${loc.country}</#if>
+                                            </span>
+                                            </#if>
+                                            <#if loc.latitude?? && loc.longitude??>
+                                            <span class="text-muted small ms-1">
+                                                <i class="bi bi-pin-map"></i> ${loc.latitude?string["0.####"]}, ${loc.longitude?string["0.####"]}
+                                            </span>
+                                            </#if>
+                                        </label>
+                                    </div>
+                                    </#list>
+                                </div>
+                                <div class="form-text">Locations are managed in <a href="/providers/locations">My Locations</a>.</div>
+                            </div>
+                            <#elseif providerLocations??>
+                            <div class="col-12">
+                                <div class="alert alert-info py-2 small">
+                                    <i class="bi bi-geo-alt me-1"></i>
+                                    No branch locations set up yet.
+                                    <a href="/providers/locations" class="alert-link">Add your first location</a> to assign stock locations to items.
+                                </div>
+                            </div>
+                            </#if>
+
                             <div class="col-12">
                                 <label class="form-label fw-semibold">Add Photos</label>
                                 <input type="file" name="photos" class="form-control"
