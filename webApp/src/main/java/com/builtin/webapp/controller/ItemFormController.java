@@ -4,6 +4,7 @@ import com.builtin.webapp.client.ItemClient;
 import com.builtin.webapp.client.ProviderClient;
 import com.builtin.webapp.dto.CreateItemRequest;
 import com.builtin.webapp.dto.ItemDto;
+import com.builtin.webapp.dto.ItemPriceDto;
 import com.builtin.webapp.dto.ProviderLocationDto;
 import com.builtin.webapp.dto.UserDto;
 import jakarta.servlet.http.HttpSession;
@@ -19,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,6 +39,10 @@ public class ItemFormController {
             "UNIT", "KG", "GRAM", "LITER", "MILLILITER",
             "METER", "CENTIMETER", "MILLIMETER",
             "SQUARE_METER", "CUBIC_METER", "PACK", "BOX", "DOZEN"
+    );
+
+    private static final List<String> SHIPPING_METHODS = List.of(
+            "SELF_PICKUP", "IMMEDIATE", "FAST", "STANDARD"
     );
 
     @GetMapping("/new")
@@ -119,6 +127,10 @@ public class ItemFormController {
             model.addAttribute("providerLocations", providerLocations);
             model.addAttribute("selectedLocationIds", selectedLocationIds);
         }
+        // 9.1: load existing per-method prices for display/editing
+        List<ItemPriceDto> existingPrices = item.getPrices() != null ? item.getPrices() : List.of();
+        model.addAttribute("existingPrices", existingPrices);
+        model.addAttribute("shippingMethods", SHIPPING_METHODS);
         return "edit-item";
     }
 
@@ -127,6 +139,9 @@ public class ItemFormController {
                              @ModelAttribute CreateItemRequest item,
                              @RequestParam(value = "photos", required = false) List<MultipartFile> photos,
                              @RequestParam(value = "locationIds", required = false) List<Long> locationIds,
+                             @RequestParam(value = "priceMethod", required = false) List<String> priceMethods,
+                             @RequestParam(value = "priceAmount", required = false) List<String> priceAmounts,
+                             @RequestParam(value = "priceDeliveryTime", required = false) List<String> priceDeliveryTimes,
                              HttpSession session,
                              RedirectAttributes ra) {
         UserDto user = (UserDto) session.getAttribute("currentUser");
@@ -141,6 +156,23 @@ public class ItemFormController {
             itemClient.updateItem(id, item);
             // 8.4: persist selected locations
             itemClient.setItemLocations(id, locationIds != null ? locationIds : List.of());
+            // 9.1: persist per-method prices
+            if (priceMethods != null && !priceMethods.isEmpty()) {
+                List<Map<String, Object>> pricePayload = new ArrayList<>();
+                for (int i = 0; i < priceMethods.size(); i++) {
+                    String method = priceMethods.get(i);
+                    String amountStr = priceAmounts != null && i < priceAmounts.size() ? priceAmounts.get(i) : "";
+                    if (method == null || method.isBlank() || amountStr == null || amountStr.isBlank()) continue;
+                    try { new java.math.BigDecimal(amountStr); } catch (NumberFormatException ignored) { continue; }
+                    Map<String, Object> entry = new HashMap<>();
+                    entry.put("shippingMethod", method);
+                    entry.put("amount", amountStr);
+                    entry.put("currency", "ILS");
+                    entry.put("deliveryTime", priceDeliveryTimes != null && i < priceDeliveryTimes.size() ? priceDeliveryTimes.get(i) : "");
+                    pricePayload.add(entry);
+                }
+                itemClient.setItemPrices(id, pricePayload);
+            }
             if (photos != null) {
                 List<MultipartFile> nonEmpty = photos.stream().filter(f -> !f.isEmpty()).toList();
                 if (!nonEmpty.isEmpty()) {

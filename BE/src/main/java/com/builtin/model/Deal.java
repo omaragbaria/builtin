@@ -50,6 +50,9 @@ public class Deal {
     @Column(name = "delivery_longitude")
     private Double deliveryLongitude;
 
+    @Column(name = "delivery_time_label")
+    private String deliveryTimeLabel;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

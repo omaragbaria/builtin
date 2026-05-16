@@ -6,8 +6,10 @@ import com.builtin.exception.ResourceNotFoundException;
 import com.builtin.model.Deal;
 import com.builtin.model.DealStatus;
 import com.builtin.model.Item;
+import com.builtin.model.ItemPrice;
 import com.builtin.model.ShippingMethod;
 import com.builtin.repository.DealRepository;
+import com.builtin.repository.ItemPriceRepository;
 import com.builtin.repository.ItemRepository;
 import com.builtin.repository.UserRepository;
 import com.builtin.service.DealService;
@@ -27,6 +29,7 @@ public class DealServiceImpl implements DealService {
 
     private final DealRepository dealRepository;
     private final ItemRepository itemRepository;
+    private final ItemPriceRepository itemPriceRepository;
     private final UserRepository userRepository;
     @Lazy
     private final DeliveryService deliveryService;
@@ -83,20 +86,32 @@ public class DealServiceImpl implements DealService {
                         .orElseThrow(() -> new ResourceNotFoundException("Item", ci.getItemId())))
                 .toList();
 
+        ShippingMethod method = request.getShippingMethod();
         BigDecimal itemsTotal = items.stream()
-                .map(Item::getPrice)
+                .map(item -> effectivePrice(item, method))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BigDecimal shippingCost = shippingCostFor(request.getShippingMethod());
+        // Derive a delivery time label from the first item's matching price entry
+        String deliveryTimeLabel = items.stream()
+                .flatMap(item -> itemPriceRepository
+                        .findFirstByItemIdAndShippingMethod(item.getId(), method)
+                        .stream())
+                .map(ItemPrice::getDeliveryTime)
+                .filter(s -> s != null && !s.isBlank())
+                .findFirst()
+                .orElse(null);
+
+        BigDecimal shippingCost = shippingCostFor(method);
         BigDecimal total = itemsTotal.add(shippingCost);
 
         Deal.DealBuilder builder = Deal.builder()
                 .status(DealStatus.PENDING_APPROVAL)
-                .shippingMethod(request.getShippingMethod())
+                .shippingMethod(method)
                 .shippingCost(shippingCost)
                 .totalPrice(total)
                 .deliveryLatitude(request.getDeliveryLatitude())
-                .deliveryLongitude(request.getDeliveryLongitude());
+                .deliveryLongitude(request.getDeliveryLongitude())
+                .deliveryTimeLabel(deliveryTimeLabel);
         if (request.getUserId() != null) {
             builder.user(userRepository.getReferenceById(request.getUserId()));
         }
@@ -115,6 +130,13 @@ public class DealServiceImpl implements DealService {
         }
 
         return saved;
+    }
+
+    private BigDecimal effectivePrice(Item item, ShippingMethod method) {
+        return itemPriceRepository
+                .findFirstByItemIdAndShippingMethod(item.getId(), method)
+                .map(ItemPrice::getAmount)
+                .orElse(item.getPrice());
     }
 
     private BigDecimal shippingCostFor(ShippingMethod method) {

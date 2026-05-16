@@ -1,5 +1,6 @@
 package com.builtin.service;
 
+import com.builtin.dto.ItemPriceRequest;
 import com.builtin.model.Item;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface ItemService {
     Item updateItem(Long id, Item item);
     void deleteItem(Long id);
     void setLocations(Long itemId, List<Long> providerLocationIds);
+    void setItemPrices(Long itemId, List<ItemPriceRequest> prices);
 }

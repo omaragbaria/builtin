@@ -126,9 +126,9 @@ Attach structured location data to both items and providers, so the system knows
 Replace the single item price with a structured price list, supporting multiple providers offering the same item at different prices tied to specific delivery timeframes.
 
 **Subtasks:**
-- [ ] 9.1 Replace the single `price` field on Item with a `prices` array. Each entry contains: `amount`, `currency`, `deliveryTime` (e.g. `"Express – 24h"`, `"Standard – 2–5 days"`), and `providerId`
-- [ ] 9.2 Apply the following display rules in the item listing UI:
+- [x] 9.1 Replace the single `price` field on Item with a `prices` array. Each entry contains: `amount`, `currency`, `deliveryTime` (e.g. `"Express – 24h"`, `"Standard – 2–5 days"`), and `providerId`
+- [x] 9.2 Apply the following display rules in the item listing UI:
   - If only one price exists → show it as-is
   - If multiple prices exist → show the lowest price prominently, with its corresponding delivery timeframe displayed beneath it in smaller text
-- [ ] 9.3 At checkout, filter the price list to show only entries that match the customer's selected shipping method
-- [ ] 9.4 Persist the selected provider's price and delivery timeframe on the order record
+- [x] 9.3 At checkout, filter the price list to show only entries that match the customer's selected shipping method
+- [x] 9.4 Persist the selected provider's price and delivery timeframe on the order record

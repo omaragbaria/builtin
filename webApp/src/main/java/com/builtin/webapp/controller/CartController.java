@@ -68,7 +68,8 @@ public class CartController {
                                 item.getUnit(),
                                 quantity,
                                 item.getProvider() != null ? item.getProvider().getName() : "",
-                                item.getShippingTime()
+                                item.getShippingTime(),
+                                item.getPrices()
                         ))
                 );
 

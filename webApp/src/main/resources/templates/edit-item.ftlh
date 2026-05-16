@@ -124,6 +124,52 @@
                             </div>
                             </#if>
 
+                            <#-- 9.1: per-method pricing -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">
+                                    <i class="bi bi-tags me-1"></i>Prices by Shipping Method
+                                </label>
+                                <div class="border rounded p-3 bg-light">
+                                    <div class="text-muted small mb-2">Set a specific price per delivery method. Leave blank to use the base price above.</div>
+                                    <div id="priceRows">
+                                    <#if existingPrices?? && existingPrices?has_content>
+                                        <#list existingPrices as ep>
+                                        <div class="row g-2 mb-2 price-row">
+                                            <div class="col-md-3">
+                                                <select name="priceMethod" class="form-select form-select-sm">
+                                                    <#list shippingMethods as sm>
+                                                    <option value="${sm}" <#if ep.shippingMethod?? && ep.shippingMethod == sm>selected</#if>>${sm}</option>
+                                                    </#list>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-text">₪</span>
+                                                    <input type="text" name="priceAmount" class="form-control"
+                                                           value="${ep.amount!''}" placeholder="Amount"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <input type="text" name="priceDeliveryTime" class="form-control form-control-sm"
+                                                       value="${ep.deliveryTime!''}" placeholder="e.g. Express – 24h"/>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button type="button" class="btn btn-outline-danger btn-sm w-100"
+                                                        onclick="this.closest('.price-row').remove()">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        </#list>
+                                    </#if>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm mt-1"
+                                            onclick="addPriceRow()">
+                                        <i class="bi bi-plus-circle me-1"></i>Add Price
+                                    </button>
+                                </div>
+                            </div>
+
                             <div class="col-12">
                                 <label class="form-label fw-semibold">Add Photos</label>
                                 <input type="file" name="photos" class="form-control"
@@ -145,5 +191,21 @@
         </div>
     </div>
 </div>
+
+<script>
+const shippingMethods = [<#list shippingMethods as sm>"${sm}"<#sep>, </#sep></#list>];
+function addPriceRow() {
+    const options = shippingMethods.map(m => `<option value="${'$'}{m}">${'$'}{m}</option>`).join('');
+    const row = document.createElement('div');
+    row.className = 'row g-2 mb-2 price-row';
+    row.innerHTML = `
+        <div class="col-md-3"><select name="priceMethod" class="form-select form-select-sm">${'$'}{options}</select></div>
+        <div class="col-md-3"><div class="input-group input-group-sm"><span class="input-group-text">₪</span><input type="text" name="priceAmount" class="form-control" placeholder="Amount"/></div></div>
+        <div class="col-md-5"><input type="text" name="priceDeliveryTime" class="form-control form-control-sm" placeholder="e.g. Express – 24h"/></div>
+        <div class="col-md-1"><button type="button" class="btn btn-outline-danger btn-sm w-100" onclick="this.closest('.price-row').remove()"><i class="bi bi-trash"></i></button></div>
+    `;
+    document.getElementById('priceRows').appendChild(row);
+}
+</script>
 
 </@layout.main>

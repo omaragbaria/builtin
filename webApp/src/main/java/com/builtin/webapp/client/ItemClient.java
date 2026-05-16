@@ -99,6 +99,16 @@ public class ItemClient {
                 .block();
     }
 
+    public void setItemPrices(Long itemId, List<java.util.Map<String, Object>> prices) {
+        webClient.put()
+                .uri("/items/{id}/prices", itemId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(prices)
+                .retrieve()
+                .bodyToMono(Void.class)
+                .block();
+    }
+
     public List<ItemDto> searchItems(String query) {
         return getAllItems().stream()
                 .filter(item -> item.getName().toLowerCase().contains(query.toLowerCase())

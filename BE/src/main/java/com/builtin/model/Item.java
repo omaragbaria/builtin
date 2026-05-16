@@ -100,4 +100,8 @@ public class Item {
     )
     @Builder.Default
     private List<ProviderLocation> locations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<ItemPrice> prices = new ArrayList<>();
 }

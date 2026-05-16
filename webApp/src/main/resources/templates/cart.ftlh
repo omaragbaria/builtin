@@ -36,14 +36,16 @@
                 </div>
                 <div class="card-body p-0">
                     <#list groupedCart[shippingGroup] as cartItem>
-                    <div class="d-flex align-items-center gap-3 p-3 border-bottom">
+                    <div class="d-flex align-items-center gap-3 p-3 border-bottom"
+                         data-item-id="${cartItem.itemId}">
                         <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width:70px;height:70px;">
                             <i class="bi bi-box-seam fs-3 text-secondary"></i>
                         </div>
                         <div class="flex-grow-1">
                             <h6 class="mb-0 fw-bold">${cartItem.name}</h6>
                             <small class="text-muted"><i class="bi bi-shop me-1"></i>${cartItem.providerName!""}</small>
-                            <div class="text-muted small">₪${cartItem.price} / ${cartItem.unit!"unit"}</div>
+                            <#-- 9.3: base price shown, JS updates it when method is selected -->
+                            <div class="text-muted small item-price-display">₪${cartItem.price} / ${cartItem.unit!"unit"}</div>
                         </div>
                         <form action="/cart/update/${cartItem.itemId}" method="post" class="d-flex align-items-center gap-2">
                             <input type="number" name="quantity" value="${cartItem.quantity}" min="0"
@@ -194,6 +196,35 @@ const subtotal = parseFloat('${total}');
 const shippingFees = { SELF_PICKUP: 0, IMMEDIATE: 49.90, FAST: 29.90, STANDARD: 9.90 };
 let immediateCoords = null;
 
+<#-- 9.3: item-level price map keyed by itemId -> { METHOD: {amount, deliveryTime} } -->
+const itemPriceMap = {
+<#if cart??>
+<#list cart as cartItem>
+<#if cartItem.prices?? && cartItem.prices?has_content>
+  "${cartItem.itemId?c}": {
+  <#list cartItem.prices as p>
+    "${p.shippingMethod!''}": { amount: ${p.amount}, deliveryTime: "${p.deliveryTime!''}" }<#sep>,</#sep>
+  </#list>
+  },
+</#if>
+</#list>
+</#if>
+};
+
+function updateItemPrices(method) {
+    document.querySelectorAll('[data-item-id]').forEach(row => {
+        const itemId = row.getAttribute('data-item-id');
+        const priceEl = row.querySelector('.item-price-display');
+        if (!priceEl) return;
+        const map = itemPriceMap[itemId];
+        if (map && map[method]) {
+            const entry = map[method];
+            const label = entry.deliveryTime ? ` (${entry.deliveryTime})` : '';
+            priceEl.textContent = '₪' + entry.amount.toFixed(2) + label;
+        }
+    });
+}
+
 function updateTotal() {
     const method = document.querySelector('input[name="shippingMethod"]:checked');
     if (!method) return;
@@ -238,6 +269,7 @@ document.querySelectorAll('input[name="shippingMethod"]').forEach(radio => {
             locationSection.style.display = 'none';
         }
         updateTotal();
+        updateItemPrices(this.value);
     });
 });
 

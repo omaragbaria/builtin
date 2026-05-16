@@ -1,8 +1,11 @@
 package com.builtin.service.impl;
 
+import com.builtin.dto.ItemPriceRequest;
 import com.builtin.exception.ResourceNotFoundException;
 import com.builtin.model.Item;
+import com.builtin.model.ItemPrice;
 import com.builtin.model.ProviderLocation;
+import com.builtin.repository.ItemPriceRepository;
 import com.builtin.repository.ItemRepository;
 import com.builtin.repository.ProviderLocationRepository;
 import com.builtin.repository.ProviderRepository;
@@ -21,6 +24,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ProviderRepository providerRepository;
     private final ProviderLocationRepository providerLocationRepository;
+    private final ItemPriceRepository itemPriceRepository;
 
     @Override
     public List<Item> getAllItems() {
@@ -90,6 +94,27 @@ public class ItemServiceImpl implements ItemService {
                 ? new ArrayList<>()
                 : providerLocationRepository.findAllById(providerLocationIds);
         item.setLocations(new ArrayList<>(locations));
+        itemRepository.save(item);
+    }
+
+    @Override
+    @Transactional
+    public void setItemPrices(Long itemId, List<ItemPriceRequest> prices) {
+        Item item = getItemById(itemId);
+        item.getPrices().clear();
+        if (prices != null) {
+            for (ItemPriceRequest req : prices) {
+                if (req.getAmount() == null || req.getShippingMethod() == null) continue;
+                ItemPrice price = ItemPrice.builder()
+                        .item(item)
+                        .amount(req.getAmount())
+                        .currency(req.getCurrency() != null ? req.getCurrency() : "ILS")
+                        .shippingMethod(req.getShippingMethod())
+                        .deliveryTime(req.getDeliveryTime())
+                        .build();
+                item.getPrices().add(price);
+            }
+        }
         itemRepository.save(item);
     }
 }

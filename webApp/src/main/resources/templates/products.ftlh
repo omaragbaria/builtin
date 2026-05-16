@@ -133,7 +133,21 @@
                             <#if item.type??><small class="text-muted mt-1" style="font-size:0.75rem">${item.type}</small></#if>
                             <#if item.provider??><small class="text-muted mt-2"><i class="bi bi-shop me-1"></i>${item.provider.name}</small></#if>
                             <div class="mt-2 d-flex justify-content-between align-items-center">
-                                <span class="fw-bold fs-5">₪${item.price}</span>
+                                <#-- 9.2: show lowest price from prices list, or fall back to base price -->
+                                <#if item.prices?? && item.prices?has_content>
+                                    <#assign lowestPrice = item.prices[0]>
+                                    <#list item.prices as p>
+                                        <#if p.amount lt lowestPrice.amount><#assign lowestPrice = p></#if>
+                                    </#list>
+                                    <div>
+                                        <span class="fw-bold fs-5">₪${lowestPrice.amount}</span>
+                                        <#if item.prices?size gt 1>
+                                            <div class="text-muted" style="font-size:0.72rem">${lowestPrice.deliveryTime!lowestPrice.shippingMethod!""}</div>
+                                        </#if>
+                                    </div>
+                                <#else>
+                                    <span class="fw-bold fs-5">₪${item.price}</span>
+                                </#if>
                                 <small class="text-muted">${item.unit!"UNIT"}</small>
                             </div>
                         </div>
@@ -167,7 +181,18 @@
                             <#if item.provider??><div><small class="text-muted"><i class="bi bi-shop me-1"></i>${item.provider.name}</small></div></#if>
                         </div>
                         <div class="text-end flex-shrink-0">
-                            <div class="fw-bold fs-5 text-dark">₪${item.price}</div>
+                            <#if item.prices?? && item.prices?has_content>
+                                <#assign lowestPrice = item.prices[0]>
+                                <#list item.prices as p>
+                                    <#if p.amount lt lowestPrice.amount><#assign lowestPrice = p></#if>
+                                </#list>
+                                <div class="fw-bold fs-5 text-dark">₪${lowestPrice.amount}</div>
+                                <#if item.prices?size gt 1>
+                                    <small class="text-muted d-block">${lowestPrice.deliveryTime!lowestPrice.shippingMethod!""}</small>
+                                </#if>
+                            <#else>
+                                <div class="fw-bold fs-5 text-dark">₪${item.price}</div>
+                            </#if>
                             <small class="text-muted d-block">${item.unit!"UNIT"}</small>
                             <a href="/products/${item.id?c}" class="btn btn-dark btn-sm mt-2">${springMacroRequestContext.getMessage('common.view')}</a>
                         </div>

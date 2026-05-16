@@ -1,5 +1,6 @@
 package com.builtin.controller;
 
+import com.builtin.dto.ItemPriceRequest;
 import com.builtin.model.Item;
 import com.builtin.service.ItemService;
 import jakarta.validation.Valid;
@@ -51,6 +52,12 @@ public class ItemController {
     @PutMapping("/{id}/locations")
     public ResponseEntity<Void> setLocations(@PathVariable Long id, @RequestBody List<Long> locationIds) {
         itemService.setLocations(id, locationIds);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/prices")
+    public ResponseEntity<Void> setItemPrices(@PathVariable Long id, @RequestBody List<ItemPriceRequest> prices) {
+        itemService.setItemPrices(id, prices);
         return ResponseEntity.noContent().build();
     }
 }

@@ -66,10 +66,47 @@
 
             <hr/>
 
+            <#-- 9.2: smart price display -->
+            <#if item.prices?? && item.prices?has_content>
+                <#if item.prices?size == 1>
+                <div class="d-flex align-items-end gap-3 mb-3">
+                    <span class="display-6 fw-bold">₪${item.prices[0].amount}</span>
+                    <span class="text-muted mb-2">${springMacroRequestContext.getMessage('product.per')} ${item.unit!"unit"}</span>
+                </div>
+                <#else>
+                <#assign lowestPrice = item.prices[0]>
+                <#list item.prices as p>
+                    <#if p.amount lt lowestPrice.amount><#assign lowestPrice = p></#if>
+                </#list>
+                <div class="d-flex align-items-end gap-3 mb-1">
+                    <span class="display-6 fw-bold">₪${lowestPrice.amount}</span>
+                    <span class="text-muted mb-2">${springMacroRequestContext.getMessage('product.per')} ${item.unit!"unit"}</span>
+                </div>
+                <div class="text-muted small mb-3">${lowestPrice.deliveryTime!lowestPrice.shippingMethod!""}</div>
+                <#-- 9.3: price table per shipping method -->
+                <div class="table-responsive mb-3">
+                    <table class="table table-sm table-bordered align-middle" style="font-size:0.85rem">
+                        <thead class="table-light">
+                            <tr><th>Shipping Method</th><th>Price</th><th>Timeframe</th></tr>
+                        </thead>
+                        <tbody>
+                            <#list item.prices as p>
+                            <tr>
+                                <td><i class="bi bi-truck me-1"></i>${p.shippingMethod!""}</td>
+                                <td class="fw-semibold">₪${p.amount}</td>
+                                <td class="text-muted">${p.deliveryTime!""}</td>
+                            </tr>
+                            </#list>
+                        </tbody>
+                    </table>
+                </div>
+                </#if>
+            <#else>
             <div class="d-flex align-items-end gap-3 mb-3">
                 <span class="display-6 fw-bold">₪${item.price}</span>
                 <span class="text-muted mb-2">${springMacroRequestContext.getMessage('product.per')} ${item.unit!"unit"}</span>
             </div>
+            </#if>
 
             <#if item.quantity?? && item.quantity gt 0>
             <p class="text-success fw-semibold"><i class="bi bi-check-circle-fill me-1"></i>${springMacroRequestContext.getMessage('common.in_stock')} &mdash; ${item.quantity} ${item.unit!"unit"}(s)</p>
