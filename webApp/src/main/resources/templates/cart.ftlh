@@ -219,7 +219,7 @@ function updateItemPrices(method) {
         const map = itemPriceMap[itemId];
         if (map && map[method]) {
             const entry = map[method];
-            const label = entry.deliveryTime ? ` (${entry.deliveryTime})` : '';
+            const label = entry.deliveryTime ? ` (${'$'}{entry.deliveryTime})` : '';
             priceEl.textContent = '₪' + entry.amount.toFixed(2) + label;
         }
     });
