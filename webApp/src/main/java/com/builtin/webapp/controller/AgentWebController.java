@@ -64,7 +64,8 @@ public class AgentWebController {
                                     item.getUnit(),
                                     1,
                                     item.getProvider() != null ? item.getProvider().getName() : "",
-                                    item.getShippingTime()
+                                    item.getShippingTime(),
+                                    item.getPrices()
                             ))
                     );
         }

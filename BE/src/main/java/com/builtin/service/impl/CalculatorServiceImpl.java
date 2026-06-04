@@ -7,9 +7,11 @@ import com.builtin.dto.CalculatorResponse.MatchedItem;
 import com.builtin.model.Item;
 import com.builtin.repository.ItemRepository;
 import com.builtin.service.CalculatorService;
+import com.builtin.util.Pricing;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -108,27 +110,29 @@ public class CalculatorServiceImpl implements CalculatorService {
 
     private MaterialLine matchToStore(MaterialLine line, List<Item> allItems) {
         String keyword = searchKeyword(line.getMaterialType());
+        Comparator<Item> byEffectivePrice = Comparator.comparing(Pricing::minEffectivePrice);
 
         List<Item> candidates = allItems.stream()
                 .filter(item -> matchesKeyword(item, keyword))
-                .sorted(Comparator.comparing(Item::getPrice))
+                .sorted(byEffectivePrice)
                 .collect(Collectors.toList());
 
         if (candidates.isEmpty()) {
             candidates = allItems.stream()
                     .filter(item -> item.getUnit() != null
                             && item.getUnit().name().equalsIgnoreCase(line.getUnit()))
-                    .sorted(Comparator.comparing(Item::getPrice))
+                    .sorted(byEffectivePrice)
                     .collect(Collectors.toList());
         }
 
         List<MatchedItem> matched = new ArrayList<>();
         for (int i = 0; i < Math.min(candidates.size(), 3); i++) {
             Item item = candidates.get(i);
+            BigDecimal price = Pricing.minEffectivePrice(item);
             matched.add(MatchedItem.builder()
                     .itemId(item.getId())
                     .name(item.getName())
-                    .price(item.getPrice())
+                    .price(price)
                     .unit(item.getUnit() != null ? item.getUnit().name() : "")
                     .availableQuantity(item.getQuantity())
                     .providerName(item.getProvider() != null ? item.getProvider().getName() : "")

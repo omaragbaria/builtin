@@ -94,7 +94,7 @@ public class DealServiceImpl implements DealService {
         // Derive a delivery time label from the first item's matching price entry
         String deliveryTimeLabel = items.stream()
                 .flatMap(item -> itemPriceRepository
-                        .findFirstByItemIdAndShippingMethod(item.getId(), method)
+                        .findFirstByItemIdAndShippingMethodOrderByAmountAsc(item.getId(), method)
                         .stream())
                 .map(ItemPrice::getDeliveryTime)
                 .filter(s -> s != null && !s.isBlank())
@@ -134,7 +134,7 @@ public class DealServiceImpl implements DealService {
 
     private BigDecimal effectivePrice(Item item, ShippingMethod method) {
         return itemPriceRepository
-                .findFirstByItemIdAndShippingMethod(item.getId(), method)
+                .findFirstByItemIdAndShippingMethodOrderByAmountAsc(item.getId(), method)
                 .map(ItemPrice::getAmount)
                 .orElse(item.getPrice());
     }

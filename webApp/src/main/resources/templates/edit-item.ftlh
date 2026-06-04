@@ -34,8 +34,12 @@
 
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Category</label>
-                                <input type="text" name="category" class="form-control"
-                                       value="${item.category!''}"/>
+                                <select name="category" class="form-select">
+                                    <option value="">None</option>
+                                    <#list categories as c>
+                                    <option value="${c}" <#if item.category?? && item.category == c>selected</#if>>${c}</option>
+                                    </#list>
+                                </select>
                             </div>
 
                             <div class="col-md-6">

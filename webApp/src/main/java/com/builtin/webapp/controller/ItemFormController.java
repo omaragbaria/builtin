@@ -41,6 +41,13 @@ public class ItemFormController {
             "SQUARE_METER", "CUBIC_METER", "PACK", "BOX", "DOZEN"
     );
 
+    private static final List<String> CATEGORIES = List.of(
+            "SEALING_AND_ADHESIVES", "PAINTS_SPRAYS_CLEANING",
+            "CUTTING_AND_GRINDING", "POLISHING_AND_SANDING",
+            "CERAMICS_AND_TILING", "PLASTERBOARD",
+            "CEMENT_AND_ADHESIVES", "IRON_AND_METAL"
+    );
+
     private static final List<String> SHIPPING_METHODS = List.of(
             "SELF_PICKUP", "IMMEDIATE", "FAST", "STANDARD"
     );
@@ -53,6 +60,8 @@ public class ItemFormController {
         }
         model.addAttribute("item", new CreateItemRequest());
         model.addAttribute("units", UNITS);
+        model.addAttribute("categories", CATEGORIES);
+        model.addAttribute("shippingMethods", SHIPPING_METHODS);
         boolean needsProviderPicker = "SUPER_ADMIN".equals(user.getUserType())
                 || ("PROVIDER".equals(user.getUserType()) && user.getProviderId() == null);
         if (needsProviderPicker) {
@@ -64,6 +73,9 @@ public class ItemFormController {
     @PostMapping("/new")
     public String createItem(@ModelAttribute CreateItemRequest item,
                              @RequestParam(value = "photos", required = false) List<MultipartFile> photos,
+                             @RequestParam(value = "priceMethod", required = false) List<String> priceMethods,
+                             @RequestParam(value = "priceAmount", required = false) List<String> priceAmounts,
+                             @RequestParam(value = "priceDeliveryTime", required = false) List<String> priceDeliveryTimes,
                              HttpSession session,
                              RedirectAttributes ra) {
         UserDto user = (UserDto) session.getAttribute("currentUser");
@@ -74,14 +86,20 @@ public class ItemFormController {
         if ("PROVIDER".equals(user.getUserType()) && user.getProviderId() != null) {
             item.setProvider(new CreateItemRequest.ProviderRef(user.getProviderId()));
         }
+        if (item.getCategory() != null && item.getCategory().isBlank()) {
+            item.setCategory(null);
+        }
 
         try {
             ItemDto created = itemClient.createItem(item);
-            if (photos != null && created != null && created.getId() != null) {
-                List<MultipartFile> nonEmpty = photos.stream()
-                        .filter(f -> !f.isEmpty()).toList();
-                if (!nonEmpty.isEmpty()) {
-                    itemClient.uploadPhotos(created.getId(), nonEmpty);
+            if (created != null && created.getId() != null) {
+                submitPrices(created.getId(), priceMethods, priceAmounts, priceDeliveryTimes);
+                if (photos != null) {
+                    List<MultipartFile> nonEmpty = photos.stream()
+                            .filter(f -> !f.isEmpty()).toList();
+                    if (!nonEmpty.isEmpty()) {
+                        itemClient.uploadPhotos(created.getId(), nonEmpty);
+                    }
                 }
             }
             ra.addFlashAttribute("success", "Item added successfully.");
@@ -90,6 +108,29 @@ public class ItemFormController {
             return "redirect:/items/new";
         }
         return "redirect:/products";
+    }
+
+    private void submitPrices(Long itemId,
+                              List<String> priceMethods,
+                              List<String> priceAmounts,
+                              List<String> priceDeliveryTimes) {
+        if (priceMethods == null || priceMethods.isEmpty()) return;
+        List<Map<String, Object>> pricePayload = new ArrayList<>();
+        for (int i = 0; i < priceMethods.size(); i++) {
+            String method = priceMethods.get(i);
+            String amountStr = priceAmounts != null && i < priceAmounts.size() ? priceAmounts.get(i) : "";
+            if (method == null || method.isBlank() || amountStr == null || amountStr.isBlank()) continue;
+            try { new java.math.BigDecimal(amountStr); } catch (NumberFormatException ignored) { continue; }
+            Map<String, Object> entry = new HashMap<>();
+            entry.put("shippingMethod", method);
+            entry.put("amount", amountStr);
+            entry.put("currency", "ILS");
+            entry.put("deliveryTime", priceDeliveryTimes != null && i < priceDeliveryTimes.size() ? priceDeliveryTimes.get(i) : "");
+            pricePayload.add(entry);
+        }
+        if (!pricePayload.isEmpty()) {
+            itemClient.setItemPrices(itemId, pricePayload);
+        }
     }
 
     @GetMapping("/{id}/edit")
@@ -131,6 +172,7 @@ public class ItemFormController {
         List<ItemPriceDto> existingPrices = item.getPrices() != null ? item.getPrices() : List.of();
         model.addAttribute("existingPrices", existingPrices);
         model.addAttribute("shippingMethods", SHIPPING_METHODS);
+        model.addAttribute("categories", CATEGORIES);
         return "edit-item";
     }
 
@@ -152,27 +194,15 @@ public class ItemFormController {
         if ("PROVIDER".equals(user.getUserType()) && user.getProviderId() != null) {
             item.setProvider(new CreateItemRequest.ProviderRef(user.getProviderId()));
         }
+        if (item.getCategory() != null && item.getCategory().isBlank()) {
+            item.setCategory(null);
+        }
         try {
             itemClient.updateItem(id, item);
             // 8.4: persist selected locations
             itemClient.setItemLocations(id, locationIds != null ? locationIds : List.of());
             // 9.1: persist per-method prices
-            if (priceMethods != null && !priceMethods.isEmpty()) {
-                List<Map<String, Object>> pricePayload = new ArrayList<>();
-                for (int i = 0; i < priceMethods.size(); i++) {
-                    String method = priceMethods.get(i);
-                    String amountStr = priceAmounts != null && i < priceAmounts.size() ? priceAmounts.get(i) : "";
-                    if (method == null || method.isBlank() || amountStr == null || amountStr.isBlank()) continue;
-                    try { new java.math.BigDecimal(amountStr); } catch (NumberFormatException ignored) { continue; }
-                    Map<String, Object> entry = new HashMap<>();
-                    entry.put("shippingMethod", method);
-                    entry.put("amount", amountStr);
-                    entry.put("currency", "ILS");
-                    entry.put("deliveryTime", priceDeliveryTimes != null && i < priceDeliveryTimes.size() ? priceDeliveryTimes.get(i) : "");
-                    pricePayload.add(entry);
-                }
-                itemClient.setItemPrices(id, pricePayload);
-            }
+            submitPrices(id, priceMethods, priceAmounts, priceDeliveryTimes);
             if (photos != null) {
                 List<MultipartFile> nonEmpty = photos.stream().filter(f -> !f.isEmpty()).toList();
                 if (!nonEmpty.isEmpty()) {
