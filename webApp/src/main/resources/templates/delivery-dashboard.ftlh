@@ -2,17 +2,22 @@
 <@layout.main pageTitle="Delivery Dashboard">
 
 <#macro stageBadge stage>
-  <#if stage == "PENDING_ASSIGNMENT"><span class="badge bg-warning text-dark">Pending Assignment</span>
-  <#elseif stage == "ACCEPTED"><span class="badge bg-info text-dark">Accepted</span>
-  <#elseif stage == "IN_DELIVERY"><span class="badge bg-primary">In Delivery</span>
-  <#elseif stage == "ARRIVED"><span class="badge bg-success">Arrived</span>
+  <#if stage == "PENDING_ASSIGNMENT"><span class="badge bg-warning text-dark">${springMacroRequestContext.getMessage('stage.pending')}</span>
+  <#elseif stage == "ACCEPTED"><span class="badge bg-info text-dark">${springMacroRequestContext.getMessage('stage.accepted')}</span>
+  <#elseif stage == "IN_DELIVERY"><span class="badge bg-primary">${springMacroRequestContext.getMessage('stage.in_delivery')}</span>
+  <#elseif stage == "ARRIVED"><span class="badge bg-success">${springMacroRequestContext.getMessage('stage.arrived')}</span>
   <#else><span class="badge bg-secondary">${stage}</span>
   </#if>
 </#macro>
 
 <#macro stageTimeline stage>
 <#assign stages = ["PENDING_ASSIGNMENT","ACCEPTED","IN_DELIVERY","ARRIVED"]>
-<#assign labels = ["Assigned","Accepted","On the Way","Arrived"]>
+<#assign labels = [
+  springMacroRequestContext.getMessage('stage.pending'),
+  springMacroRequestContext.getMessage('stage.accepted'),
+  springMacroRequestContext.getMessage('stage.in_delivery'),
+  springMacroRequestContext.getMessage('stage.arrived')
+]>
 <#assign icons  = ["bi-hourglass-split","bi-check-circle","bi-truck","bi-house-check"]>
 <#assign currentIdx = 0>
 <#list stages as s><#if s == stage><#assign currentIdx = s?index></#if></#list>
@@ -46,15 +51,15 @@
   <!-- Header -->
   <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
     <div>
-      <h2 class="fw-bold mb-0"><i class="bi bi-truck me-2"></i>Delivery Dashboard</h2>
+      <h2 class="fw-bold mb-0"><i class="bi bi-truck me-2"></i>${springMacroRequestContext.getMessage('delivery.title')}</h2>
       <p class="text-muted mb-0 small">
-        <#if currentUser.userType == "DELIVERY">Your packages and incoming assignments<#else>All delivery operations</#if>
+        <#if currentUser.userType == "DELIVERY">${springMacroRequestContext.getMessage('delivery.subtitle.driver')}<#else>${springMacroRequestContext.getMessage('delivery.subtitle.admin')}</#if>
       </p>
     </div>
     <div class="d-flex align-items-center gap-3">
-      <span class="text-muted small"><i class="bi bi-arrow-clockwise me-1"></i>Auto-refreshing in <span id="countdown">30</span>s</span>
+      <span class="text-muted small"><i class="bi bi-arrow-clockwise me-1"></i>${springMacroRequestContext.getMessage('delivery.auto_refresh')} <span id="countdown">30</span>s</span>
       <a href="/deliveries/track" class="btn btn-outline-secondary btn-sm">
-        <i class="bi bi-search me-1"></i>Track an Order
+        <i class="bi bi-search me-1"></i>${springMacroRequestContext.getMessage('delivery.track_order')}
       </a>
     </div>
   </div>
@@ -81,7 +86,7 @@
     <div class="col-6 col-md-3">
       <div class="card border-warning h-100 text-center py-3">
         <div class="fs-2 fw-bold text-warning">${pendingDeliveries?size}</div>
-        <div class="text-muted small">Awaiting Assignment</div>
+        <div class="text-muted small">${springMacroRequestContext.getMessage('delivery.awaiting_assignment')}</div>
       </div>
     </div>
     <div class="col-6 col-md-3">
@@ -89,7 +94,7 @@
         <#assign acceptedCount = 0>
         <#list myDeliveries as d><#if d.stage == "ACCEPTED"><#assign acceptedCount = acceptedCount + 1></#if></#list>
         <div class="fs-2 fw-bold text-info">${acceptedCount}</div>
-        <div class="text-muted small">Accepted</div>
+        <div class="text-muted small">${springMacroRequestContext.getMessage('stage.accepted')}</div>
       </div>
     </div>
     <div class="col-6 col-md-3">
@@ -97,7 +102,7 @@
         <#assign inDeliveryCount = 0>
         <#list myDeliveries as d><#if d.stage == "IN_DELIVERY"><#assign inDeliveryCount = inDeliveryCount + 1></#if></#list>
         <div class="fs-2 fw-bold text-primary">${inDeliveryCount}</div>
-        <div class="text-muted small">In Delivery</div>
+        <div class="text-muted small">${springMacroRequestContext.getMessage('stage.in_delivery')}</div>
       </div>
     </div>
     <div class="col-6 col-md-3">
@@ -105,7 +110,7 @@
         <#assign arrivedCount = 0>
         <#list myDeliveries as d><#if d.stage == "ARRIVED"><#assign arrivedCount = arrivedCount + 1></#if></#list>
         <div class="fs-2 fw-bold text-success">${arrivedCount}</div>
-        <div class="text-muted small">Delivered</div>
+        <div class="text-muted small">${springMacroRequestContext.getMessage('stage.delivered')}</div>
       </div>
     </div>
   </div>
@@ -113,7 +118,7 @@
   <!-- Pending Packages -->
   <div class="card shadow-sm mb-4">
     <div class="card-header d-flex justify-content-between align-items-center">
-      <h5 class="mb-0 fw-bold"><i class="bi bi-inbox text-warning me-2"></i>Packages Waiting for Assignment</h5>
+      <h5 class="mb-0 fw-bold"><i class="bi bi-inbox text-warning me-2"></i>${springMacroRequestContext.getMessage('delivery.waiting_heading')}</h5>
       <span class="badge bg-warning text-dark">${pendingDeliveries?size}</span>
     </div>
     <#if pendingDeliveries?has_content>
@@ -132,11 +137,11 @@
           </div>
           <div class="d-flex gap-2">
             <a href="/deliveries/${d.id}" class="btn btn-outline-secondary btn-sm">
-              <i class="bi bi-eye me-1"></i>Details
+              <i class="bi bi-eye me-1"></i>${springMacroRequestContext.getMessage('common.details')}
             </a>
             <form method="post" action="/deliveries/${d.id}/accept">
               <button type="submit" class="btn btn-success">
-                <i class="bi bi-check-circle me-1"></i>Accept Package
+                <i class="bi bi-check-circle me-1"></i>${springMacroRequestContext.getMessage('delivery.accept_package')}
               </button>
             </form>
           </div>
@@ -147,7 +152,7 @@
     <#else>
     <div class="card-body text-center py-5 text-muted">
       <i class="bi bi-inbox fs-1"></i>
-      <p class="mt-2 mb-0">No packages waiting for assignment right now.</p>
+      <p class="mt-2 mb-0">${springMacroRequestContext.getMessage('delivery.no_pending')}</p>
     </div>
     </#if>
   </div>
@@ -155,7 +160,7 @@
   <!-- My Active Deliveries -->
   <div class="card shadow-sm">
     <div class="card-header d-flex justify-content-between align-items-center">
-      <h5 class="mb-0 fw-bold"><i class="bi bi-box-seam text-primary me-2"></i>My Deliveries</h5>
+      <h5 class="mb-0 fw-bold"><i class="bi bi-box-seam text-primary me-2"></i>${springMacroRequestContext.getMessage('delivery.my_deliveries')}</h5>
       <span class="badge bg-primary">${myDeliveries?size}</span>
     </div>
     <#if myDeliveries?has_content>
@@ -165,7 +170,7 @@
         <!-- Header row -->
         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
           <div>
-            <span class="fw-bold fs-5">Order #${d.dealId}</span>
+            <span class="fw-bold fs-5">${springMacroRequestContext.getMessage('common.order')} #${d.dealId}</span>
             <span class="ms-2"><@stageBadge d.stage!"" /></span>
             <#if d.customerName?has_content>
             <div class="text-muted small mt-1">
@@ -182,7 +187,7 @@
           </div>
           <#if d.eta??>
           <div class="text-end">
-            <div class="text-muted small">ETA</div>
+            <div class="text-muted small">${springMacroRequestContext.getMessage('delivery.col.eta')}</div>
             <div class="fw-semibold text-primary">
               <i class="bi bi-clock me-1"></i>${d.eta?string("dd MMM yyyy, HH:mm")}
             </div>
@@ -196,7 +201,7 @@
         <!-- Detail link -->
         <div class="mt-2">
           <a href="/deliveries/${d.id}" class="btn btn-outline-primary btn-sm">
-            <i class="bi bi-box-arrow-up-right me-1"></i>View Full Details
+            <i class="bi bi-box-arrow-up-right me-1"></i>${springMacroRequestContext.getMessage('delivery.view_full')}
           </a>
         </div>
 
@@ -204,24 +209,24 @@
         <#if d.stage != "ARRIVED">
         <div class="d-flex gap-2 flex-wrap mt-3 pt-3 border-top">
           <form method="post" action="/deliveries/${d.id}/stage" class="d-flex align-items-center gap-2">
-            <label class="text-muted small mb-0">Update stage:</label>
+            <label class="text-muted small mb-0">${springMacroRequestContext.getMessage('delivery.update_stage')}</label>
             <select name="stage" class="form-select form-select-sm" style="width:auto;" onchange="this.form.submit()">
-              <option value="ACCEPTED"    <#if d.stage == "ACCEPTED">selected</#if>>Accepted</option>
-              <option value="IN_DELIVERY" <#if d.stage == "IN_DELIVERY">selected</#if>>In Delivery</option>
-              <option value="ARRIVED">Arrived — Mark as Delivered</option>
+              <option value="ACCEPTED"    <#if d.stage == "ACCEPTED">selected</#if>>${springMacroRequestContext.getMessage('stage.accepted')}</option>
+              <option value="IN_DELIVERY" <#if d.stage == "IN_DELIVERY">selected</#if>>${springMacroRequestContext.getMessage('stage.in_delivery')}</option>
+              <option value="ARRIVED">${springMacroRequestContext.getMessage('delivery.stage.arrived_option')}</option>
             </select>
           </form>
           <form method="post" action="/deliveries/${d.id}/eta" class="d-flex align-items-center gap-2">
-            <label class="text-muted small mb-0">ETA:</label>
+            <label class="text-muted small mb-0">${springMacroRequestContext.getMessage('delivery.col.eta')}:</label>
             <input type="datetime-local" name="eta" class="form-control form-control-sm" style="width:200px;"
                    <#if d.eta??>value="${d.eta?string("yyyy-MM-dd'T'HH:mm")}"</#if>/>
             <button type="submit" class="btn btn-outline-secondary btn-sm">
-              <i class="bi bi-clock-fill"></i> Set
+              <i class="bi bi-clock-fill"></i> ${springMacroRequestContext.getMessage('delivery.set')}
             </button>
           </form>
         </div>
         <#else>
-        <div class="mt-2 text-success small"><i class="bi bi-check-circle-fill me-1"></i>Delivered — no further actions needed.</div>
+        <div class="mt-2 text-success small"><i class="bi bi-check-circle-fill me-1"></i>${springMacroRequestContext.getMessage('delivery.delivered_message')}</div>
         </#if>
       </div>
       </#list>
@@ -229,7 +234,7 @@
     <#else>
     <div class="card-body text-center py-5 text-muted">
       <i class="bi bi-truck fs-1"></i>
-      <p class="mt-2 mb-0">No deliveries assigned to you yet. Accept a package above to get started.</p>
+      <p class="mt-2 mb-0">${springMacroRequestContext.getMessage('delivery.no_deliveries')}</p>
     </div>
     </#if>
   </div>
@@ -245,36 +250,36 @@
     <div class="col-6 col-md-3">
       <div class="card border-warning h-100 text-center py-3">
         <div class="fs-2 fw-bold text-warning">${(stageCounts["PENDING_ASSIGNMENT"])!0}</div>
-        <div class="text-muted small">Pending Assignment</div>
+        <div class="text-muted small">${springMacroRequestContext.getMessage('stage.pending')}</div>
       </div>
     </div>
     <div class="col-6 col-md-3">
       <div class="card border-info h-100 text-center py-3">
         <div class="fs-2 fw-bold text-info">${(stageCounts["ACCEPTED"])!0}</div>
-        <div class="text-muted small">Accepted</div>
+        <div class="text-muted small">${springMacroRequestContext.getMessage('stage.accepted')}</div>
       </div>
     </div>
     <div class="col-6 col-md-3">
       <div class="card border-primary h-100 text-center py-3">
         <div class="fs-2 fw-bold text-primary">${(stageCounts["IN_DELIVERY"])!0}</div>
-        <div class="text-muted small">In Delivery</div>
+        <div class="text-muted small">${springMacroRequestContext.getMessage('stage.in_delivery')}</div>
       </div>
     </div>
     <div class="col-6 col-md-3">
       <div class="card border-success h-100 text-center py-3">
         <div class="fs-2 fw-bold text-success">${(stageCounts["ARRIVED"])!0}</div>
-        <div class="text-muted small">Arrived</div>
+        <div class="text-muted small">${springMacroRequestContext.getMessage('stage.arrived')}</div>
       </div>
     </div>
   </div>
 
   <!-- Filter tabs -->
   <ul class="nav nav-tabs mb-3" id="stageTabs">
-    <li class="nav-item"><a class="nav-link active" href="#" data-filter="ALL">All <span class="badge bg-secondary">${allDeliveries?size}</span></a></li>
-    <li class="nav-item"><a class="nav-link" href="#" data-filter="PENDING_ASSIGNMENT">Pending <span class="badge bg-warning text-dark">${(stageCounts["PENDING_ASSIGNMENT"])!0}</span></a></li>
-    <li class="nav-item"><a class="nav-link" href="#" data-filter="ACCEPTED">Accepted <span class="badge bg-info text-dark">${(stageCounts["ACCEPTED"])!0}</span></a></li>
-    <li class="nav-item"><a class="nav-link" href="#" data-filter="IN_DELIVERY">In Delivery <span class="badge bg-primary">${(stageCounts["IN_DELIVERY"])!0}</span></a></li>
-    <li class="nav-item"><a class="nav-link" href="#" data-filter="ARRIVED">Arrived <span class="badge bg-success">${(stageCounts["ARRIVED"])!0}</span></a></li>
+    <li class="nav-item"><a class="nav-link active" href="#" data-filter="ALL">${springMacroRequestContext.getMessage('delivery.tab_all')} <span class="badge bg-secondary">${allDeliveries?size}</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="#" data-filter="PENDING_ASSIGNMENT">${springMacroRequestContext.getMessage('delivery.tab_pending')} <span class="badge bg-warning text-dark">${(stageCounts["PENDING_ASSIGNMENT"])!0}</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="#" data-filter="ACCEPTED">${springMacroRequestContext.getMessage('stage.accepted')} <span class="badge bg-info text-dark">${(stageCounts["ACCEPTED"])!0}</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="#" data-filter="IN_DELIVERY">${springMacroRequestContext.getMessage('stage.in_delivery')} <span class="badge bg-primary">${(stageCounts["IN_DELIVERY"])!0}</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="#" data-filter="ARRIVED">${springMacroRequestContext.getMessage('stage.arrived')} <span class="badge bg-success">${(stageCounts["ARRIVED"])!0}</span></a></li>
   </ul>
 
   <div class="card shadow-sm">
@@ -284,15 +289,15 @@
         <table class="table table-hover align-middle mb-0" id="deliveriesTable">
           <thead class="table-light">
             <tr>
-              <th>Order #</th>
-              <th>Customer</th>
-              <th>Stage</th>
-              <th>Courier</th>
-              <th>Vehicle</th>
-              <th>ETA</th>
-              <th>Total</th>
-              <th>Shipping</th>
-              <th>Track</th>
+              <th>${springMacroRequestContext.getMessage('delivery.col.order')}</th>
+              <th>${springMacroRequestContext.getMessage('delivery.col.customer')}</th>
+              <th>${springMacroRequestContext.getMessage('delivery.col.stage')}</th>
+              <th>${springMacroRequestContext.getMessage('delivery.col.courier')}</th>
+              <th>${springMacroRequestContext.getMessage('delivery.col.vehicle')}</th>
+              <th>${springMacroRequestContext.getMessage('delivery.col.eta')}</th>
+              <th>${springMacroRequestContext.getMessage('delivery.col.total')}</th>
+              <th>${springMacroRequestContext.getMessage('delivery.col.shipping')}</th>
+              <th>${springMacroRequestContext.getMessage('delivery.col.track')}</th>
             </tr>
           </thead>
           <tbody>
@@ -310,7 +315,7 @@
                 <#if d.deliveryAccountName?has_content>
                 <div>${d.deliveryAccountName}</div>
                 <div class="text-muted small">${d.deliveryAccountType!""}</div>
-                <#else><span class="text-muted text-nowrap"><i class="bi bi-hourglass-split me-1"></i>Unassigned</span></#if>
+                <#else><span class="text-muted text-nowrap"><i class="bi bi-hourglass-split me-1"></i>${springMacroRequestContext.getMessage('delivery.unassigned')}</span></#if>
               </td>
               <td>
                 <#if d.vehicleType?has_content>
@@ -337,7 +342,7 @@
       <#else>
       <div class="text-center py-5 text-muted">
         <i class="bi bi-inbox fs-1"></i>
-        <p class="mt-2">No deliveries found.</p>
+        <p class="mt-2">${springMacroRequestContext.getMessage('delivery.no_deliveries_admin')}</p>
       </div>
       </#if>
     </div>
@@ -356,10 +361,23 @@ setInterval(() => {
     if (seconds <= 0) location.reload();
 }, 1000);
 
-// ── GPS location broadcast (6.2) — active while driver has IN_DELIVERY packages ──
-<#if currentUser.userType == "DELIVERY" && inDeliveryCount?? && (inDeliveryCount > 0)>
+// ── GPS location broadcast (6.2) — active while driver has accepted or in-delivery packages ──
+<#if currentUser.userType == "DELIVERY" && ((acceptedCount!0) + (inDeliveryCount!0)) gt 0>
 (function () {
-    if (!navigator.geolocation) return;
+    const banner = (msg) => {
+        let el = document.getElementById('gpsBanner');
+        if (!el) {
+            el = document.createElement('div');
+            el.id = 'gpsBanner';
+            el.className = 'alert alert-warning small mb-3';
+            document.querySelector('.container-fluid')?.prepend(el);
+        }
+        el.innerHTML = '<i class="bi bi-geo-alt me-1"></i>' + msg;
+    };
+    if (!navigator.geolocation) {
+        banner('Geolocation is not supported on this device — couriers cannot share live location.');
+        return;
+    }
     const send = (lat, lng) => fetch('/deliveries/location', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -367,7 +385,15 @@ setInterval(() => {
     }).catch(() => {});
     navigator.geolocation.watchPosition(
         pos => send(pos.coords.latitude, pos.coords.longitude),
-        null,
+        err => {
+            if (err.code === err.PERMISSION_DENIED) {
+                banner('Location permission denied. Customers cannot see your live position. Re-enable location for this site to share GPS.');
+            } else if (err.code === err.POSITION_UNAVAILABLE) {
+                banner('GPS signal unavailable.');
+            } else if (err.code === err.TIMEOUT) {
+                banner('GPS timed out — retrying.');
+            }
+        },
         { enableHighAccuracy: true, maximumAge: 15000, timeout: 10000 }
     );
 })();

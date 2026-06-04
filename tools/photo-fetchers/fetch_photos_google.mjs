@@ -1,4 +1,4 @@
-import puppeteer from './node_modules/puppeteer/lib/esm/puppeteer/puppeteer.js';
+import puppeteer from 'puppeteer';
 import http from 'http';
 import https from 'https';
 

@@ -55,21 +55,21 @@
                 <#if currentUser?? && (currentUser.userType == "DELIVERY" || currentUser.userType == "SUPER_ADMIN")>
                 <li class="nav-item">
                     <a class="nav-link" href="/deliveries">
-                        <i class="bi bi-truck me-1"></i>Deliveries
+                        <i class="bi bi-truck me-1"></i>${springMacroRequestContext.getMessage('nav.deliveries')}
                     </a>
                 </li>
                 </#if>
                 <#if currentUser?? && currentUser.userType == "PROVIDER">
                 <li class="nav-item">
                     <a class="nav-link" href="/providers/locations">
-                        <i class="bi bi-geo-alt me-1"></i>My Locations
+                        <i class="bi bi-geo-alt me-1"></i>${springMacroRequestContext.getMessage('nav.my_locations')}
                     </a>
                 </li>
                 </#if>
                 <#if currentUser?? && currentUser.userType == "CUSTOMER">
                 <li class="nav-item">
                     <a class="nav-link" href="/deliveries/track">
-                        <i class="bi bi-search me-1"></i>Track Order
+                        <i class="bi bi-search me-1"></i>${springMacroRequestContext.getMessage('nav.track_order')}
                     </a>
                 </li>
                 </#if>

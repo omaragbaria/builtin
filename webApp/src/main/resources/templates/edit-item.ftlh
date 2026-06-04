@@ -116,7 +116,7 @@
                                     </div>
                                     </#list>
                                 </div>
-                                <div class="form-text">Locations are managed in <a href="/providers/locations">My Locations</a>.</div>
+                                <div class="form-text">${springMacroRequestContext.getMessage('edit.locations_managed')?no_esc}</div>
                             </div>
                             <#elseif providerLocations??>
                             <div class="col-12">
