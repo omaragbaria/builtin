@@ -32,6 +32,13 @@ targets:
     info:
       path: BuiltIn/Resources/Info.plist
       properties:
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations:
+          - en
+          - he
+          - ar
+          - ru
+          - zh-Hans
         NSCameraUsageDescription: "Required to photograph items for upload."
         NSPhotoLibraryUsageDescription: "Required to attach photos to items."
         NSLocationWhenInUseUsageDescription: "Required to set a delivery drop-off location."

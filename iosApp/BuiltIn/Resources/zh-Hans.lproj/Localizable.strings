@@ -1,0 +1,120 @@
+// Common
+"common.cancel"          = "取消";
+"common.save"            = "保存";
+"common.add_to_cart"     = "加入购物车";
+"common.in_stock"        = "有货";
+"common.out_of_stock"    = "缺货";
+"common.loading"         = "加载中…";
+"common.retry"           = "重试";
+"common.back"            = "返回";
+"common.details"         = "详情";
+"common.update"          = "更新";
+
+// Tab bar
+"tab.home"               = "首页";
+"tab.products"           = "产品";
+"tab.estimate"           = "估算";
+"tab.cart"               = "购物车";
+"tab.track"              = "追踪";
+"tab.profile"            = "我的";
+"tab.items"              = "商品";
+"tab.locations"          = "门店";
+"tab.dashboard"          = "面板";
+"tab.deliveries"         = "配送";
+
+// Login
+"login.title"            = "BuiltIn";
+"login.subtitle"         = "建材平台";
+"login.username"         = "用户名";
+"login.password"         = "密码";
+"login.sign_in"          = "登录";
+
+// Cart
+"cart.title"             = "购物车";
+"cart.empty.title"       = "购物车为空";
+"cart.empty.subtitle"    = "从产品目录添加商品以开始。";
+"cart.shipping"          = "配送";
+"cart.items"             = "商品";
+"cart.total"             = "合计";
+"cart.checkout"          = "去结算";
+"cart.method.pickup"     = "自取";
+"cart.method.express"    = "极速";
+"cart.method.fast"       = "快速";
+"cart.method.standard"   = "经济";
+
+// Checkout
+"checkout.title"             = "结算";
+"checkout.shipping_method"   = "配送方式";
+"checkout.dropoff"           = "送达位置";
+"checkout.dropoff.hint"      = "点击地图标记送达位置。";
+"checkout.order_summary"     = "订单摘要";
+"checkout.place_order"       = "下单";
+
+// Estimate
+"estimate.title"             = "估算";
+"estimate.tab.calculator"    = "计算器";
+"estimate.tab.agent"         = "AI助手";
+
+// Calculator
+"calculator.structure"             = "结构类型";
+"calculator.structure.roof_slab"   = "屋顶 / 楼板";
+"calculator.structure.wall"        = "墙体";
+"calculator.length"                = "长度 (米)";
+"calculator.width"                 = "宽度 (米)";
+"calculator.height"                = "高度 (米)";
+"calculator.thickness"             = "厚度 (米)";
+"calculator.calculate"             = "计算材料";
+"calculator.no_match"              = "目录中未找到匹配的商品。";
+
+// Agent
+"agent.prompt"             = "描述您想建造什么";
+"agent.placeholder"        = "例如：橡木壁橱，4米宽，60厘米深，1.8米高";
+
+// Order tracking
+"tracking.title"               = "订单追踪";
+"tracking.placeholder"         = "订单号";
+"tracking.track"               = "追踪";
+"tracking.status"              = "配送状态";
+"tracking.eta"                 = "预计到达";
+"tracking.order_details"       = "订单详情";
+"tracking.driver"              = "骑手";
+"tracking.vehicle"             = "车辆";
+"tracking.driver_location"     = "骑手位置";
+"tracking.driver_pending"      = "骑手位置暂不可用";
+"tracking.current"             = "当前";
+"tracking.updated"             = "已更新";
+"tracking.stage.pending"       = "订单已接收";
+"tracking.stage.accepted"      = "骑手已接单";
+"tracking.stage.in_delivery"   = "配送中";
+"tracking.stage.arrived"       = "已送达";
+
+// Profile
+"profile.title"            = "我的";
+"profile.language"         = "语言";
+"profile.sign_out"         = "退出登录";
+
+// Provider
+"provider.items"           = "我的商品";
+"provider.add_item"        = "添加商品";
+"provider.locations"       = "我的门店";
+"provider.add_location"    = "添加门店";
+
+// Delivery
+"delivery.dashboard"             = "面板";
+"delivery.pending"               = "等待分配";
+"delivery.accepted"              = "已接受";
+"delivery.in_delivery"           = "配送中";
+"delivery.arrived"               = "已到达";
+"delivery.my_deliveries"         = "我的配送";
+"delivery.accept"                = "接收包裹";
+"delivery.no_pending"            = "当前没有等待分配的包裹。";
+"delivery.no_mine"               = "您尚未分配到配送任务。";
+"delivery.update_stage"          = "更新阶段";
+"delivery.set_eta"               = "设置到达时间";
+"delivery.tab_all_admin"         = "全部";
+"delivery.unassigned"            = "未分配";
+
+// Admin
+"admin.providers"                = "供应商";
+"admin.no_providers"             = "未找到供应商。";
+"admin.items_all"                = "全部商品";

@@ -1,0 +1,123 @@
+/* Keys mirror webApp/src/main/resources/messages.properties.
+   Add new entries here first, then translate into the other lprojs. */
+
+// Common
+"common.cancel"          = "Cancel";
+"common.save"            = "Save";
+"common.add_to_cart"     = "Add to Cart";
+"common.in_stock"        = "In Stock";
+"common.out_of_stock"    = "Out of Stock";
+"common.loading"         = "Loading…";
+"common.retry"           = "Retry";
+"common.back"            = "Back";
+"common.details"         = "Details";
+"common.update"          = "Update";
+
+// Tab bar
+"tab.home"               = "Home";
+"tab.products"           = "Products";
+"tab.estimate"           = "Estimate";
+"tab.cart"               = "Cart";
+"tab.track"              = "Track";
+"tab.profile"            = "Profile";
+"tab.items"              = "Items";
+"tab.locations"          = "Locations";
+"tab.dashboard"          = "Dashboard";
+"tab.deliveries"         = "Deliveries";
+
+// Login
+"login.title"            = "BuiltIn";
+"login.subtitle"         = "Building Materials Platform";
+"login.username"         = "Username";
+"login.password"         = "Password";
+"login.sign_in"          = "Sign In";
+
+// Cart
+"cart.title"             = "Cart";
+"cart.empty.title"       = "Your Cart is Empty";
+"cart.empty.subtitle"    = "Add items from the product catalog to get started.";
+"cart.shipping"          = "Shipping";
+"cart.items"             = "Items";
+"cart.total"             = "Total";
+"cart.checkout"          = "Proceed to Checkout";
+"cart.method.pickup"     = "Pickup";
+"cart.method.express"    = "Express";
+"cart.method.fast"       = "Fast";
+"cart.method.standard"   = "Standard";
+
+// Checkout
+"checkout.title"             = "Checkout";
+"checkout.shipping_method"   = "Shipping Method";
+"checkout.dropoff"           = "Drop-off Location";
+"checkout.dropoff.hint"      = "Tap the map to pin your delivery location.";
+"checkout.order_summary"     = "Order Summary";
+"checkout.place_order"       = "Place Order";
+
+// Estimate
+"estimate.title"             = "Estimate";
+"estimate.tab.calculator"    = "Calculator";
+"estimate.tab.agent"         = "AI Agent";
+
+// Calculator
+"calculator.structure"             = "Structure";
+"calculator.structure.roof_slab"   = "Roof / Floor Slab";
+"calculator.structure.wall"        = "Wall";
+"calculator.length"                = "Length (m)";
+"calculator.width"                 = "Width (m)";
+"calculator.height"                = "Height (m)";
+"calculator.thickness"             = "Thickness (m)";
+"calculator.calculate"             = "Calculate Materials";
+"calculator.no_match"              = "No matching items in catalog.";
+
+// Agent
+"agent.prompt"             = "Describe what you want to build";
+"agent.placeholder"        = "e.g. I want a wall closet from oak wood, 4m wide, 60cm deep, 1.8m high";
+
+// Order tracking
+"tracking.title"               = "Track Order";
+"tracking.placeholder"         = "Order number (Deal ID)";
+"tracking.track"               = "Track";
+"tracking.status"              = "Delivery Status";
+"tracking.eta"                 = "ETA";
+"tracking.order_details"       = "Order Details";
+"tracking.driver"              = "Driver";
+"tracking.vehicle"             = "Vehicle";
+"tracking.driver_location"     = "Driver Location";
+"tracking.driver_pending"      = "Driver location not yet available";
+"tracking.current"             = "Current";
+"tracking.updated"             = "Updated";
+"tracking.stage.pending"       = "Order Received";
+"tracking.stage.accepted"      = "Accepted by Courier";
+"tracking.stage.in_delivery"   = "Out for Delivery";
+"tracking.stage.arrived"       = "Delivered";
+
+// Profile
+"profile.title"            = "Profile";
+"profile.language"         = "Language";
+"profile.sign_out"         = "Sign Out";
+
+// Provider — phase 6
+"provider.items"           = "My Items";
+"provider.add_item"        = "Add Item";
+"provider.locations"       = "My Locations";
+"provider.add_location"    = "Add Location";
+
+// Delivery — phase 7
+"delivery.dashboard"             = "Dashboard";
+"delivery.pending"               = "Pending Assignment";
+"delivery.accepted"              = "Accepted";
+"delivery.in_delivery"           = "In Delivery";
+"delivery.arrived"               = "Arrived";
+"delivery.my_deliveries"         = "My Deliveries";
+"delivery.accept"                = "Accept Package";
+"delivery.no_pending"            = "No packages waiting for assignment.";
+"delivery.no_mine"               = "No deliveries assigned to you yet.";
+"delivery.update_stage"          = "Update Stage";
+"delivery.set_eta"               = "Set ETA";
+"delivery.tab_all_admin"         = "All";
+"delivery.unassigned"            = "Unassigned";
+
+// Admin
+"admin.providers"                = "Providers";
+"admin.no_providers"             = "No providers found.";
+"admin.items_all"                = "All Items";

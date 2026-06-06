@@ -1,0 +1,120 @@
+// Common
+"common.cancel"          = "Отмена";
+"common.save"            = "Сохранить";
+"common.add_to_cart"     = "Добавить в корзину";
+"common.in_stock"        = "В наличии";
+"common.out_of_stock"    = "Нет в наличии";
+"common.loading"         = "Загрузка…";
+"common.retry"           = "Повторить";
+"common.back"            = "Назад";
+"common.details"         = "Подробности";
+"common.update"          = "Обновить";
+
+// Tab bar
+"tab.home"               = "Главная";
+"tab.products"           = "Товары";
+"tab.estimate"           = "Расчёт";
+"tab.cart"               = "Корзина";
+"tab.track"              = "Отслеживание";
+"tab.profile"            = "Профиль";
+"tab.items"              = "Товары";
+"tab.locations"          = "Точки";
+"tab.dashboard"          = "Панель";
+"tab.deliveries"         = "Доставки";
+
+// Login
+"login.title"            = "BuiltIn";
+"login.subtitle"         = "Платформа строительных материалов";
+"login.username"         = "Имя пользователя";
+"login.password"         = "Пароль";
+"login.sign_in"          = "Войти";
+
+// Cart
+"cart.title"             = "Корзина";
+"cart.empty.title"       = "Корзина пуста";
+"cart.empty.subtitle"    = "Добавьте товары из каталога, чтобы начать.";
+"cart.shipping"          = "Доставка";
+"cart.items"             = "Товары";
+"cart.total"             = "Итого";
+"cart.checkout"          = "Оформить заказ";
+"cart.method.pickup"     = "Самовывоз";
+"cart.method.express"    = "Экспресс";
+"cart.method.fast"       = "Быстрая";
+"cart.method.standard"   = "Стандарт";
+
+// Checkout
+"checkout.title"             = "Оформление";
+"checkout.shipping_method"   = "Способ доставки";
+"checkout.dropoff"           = "Точка доставки";
+"checkout.dropoff.hint"      = "Коснитесь карты, чтобы выбрать точку.";
+"checkout.order_summary"     = "Сводка заказа";
+"checkout.place_order"       = "Подтвердить заказ";
+
+// Estimate
+"estimate.title"             = "Расчёт";
+"estimate.tab.calculator"    = "Калькулятор";
+"estimate.tab.agent"         = "ИИ-ассистент";
+
+// Calculator
+"calculator.structure"             = "Тип конструкции";
+"calculator.structure.roof_slab"   = "Крыша / Перекрытие";
+"calculator.structure.wall"        = "Стена";
+"calculator.length"                = "Длина (м)";
+"calculator.width"                 = "Ширина (м)";
+"calculator.height"                = "Высота (м)";
+"calculator.thickness"             = "Толщина (м)";
+"calculator.calculate"             = "Рассчитать материалы";
+"calculator.no_match"              = "Подходящих товаров не найдено.";
+
+// Agent
+"agent.prompt"             = "Опишите, что вы хотите построить";
+"agent.placeholder"        = "Напр.: шкаф-купе из дуба, 4 м ширина, 60 см глубина, 1.8 м высота";
+
+// Order tracking
+"tracking.title"               = "Отслеживание";
+"tracking.placeholder"         = "Номер заказа";
+"tracking.track"               = "Отследить";
+"tracking.status"              = "Статус доставки";
+"tracking.eta"                 = "Прибытие";
+"tracking.order_details"       = "Сведения о заказе";
+"tracking.driver"              = "Курьер";
+"tracking.vehicle"             = "Транспорт";
+"tracking.driver_location"     = "Местоположение курьера";
+"tracking.driver_pending"      = "Местоположение курьера пока недоступно";
+"tracking.current"             = "Сейчас";
+"tracking.updated"             = "Обновлено";
+"tracking.stage.pending"       = "Заказ получен";
+"tracking.stage.accepted"      = "Принят курьером";
+"tracking.stage.in_delivery"   = "В пути";
+"tracking.stage.arrived"       = "Доставлено";
+
+// Profile
+"profile.title"            = "Профиль";
+"profile.language"         = "Язык";
+"profile.sign_out"         = "Выйти";
+
+// Provider
+"provider.items"           = "Мои товары";
+"provider.add_item"        = "Добавить товар";
+"provider.locations"       = "Мои точки";
+"provider.add_location"    = "Добавить точку";
+
+// Delivery
+"delivery.dashboard"             = "Панель";
+"delivery.pending"               = "Ожидает назначения";
+"delivery.accepted"              = "Принято";
+"delivery.in_delivery"           = "В доставке";
+"delivery.arrived"               = "Доставлено";
+"delivery.my_deliveries"         = "Мои доставки";
+"delivery.accept"                = "Принять посылку";
+"delivery.no_pending"            = "Нет посылок, ожидающих назначения.";
+"delivery.no_mine"               = "У вас пока нет назначенных доставок.";
+"delivery.update_stage"          = "Обновить этап";
+"delivery.set_eta"               = "Задать прибытие";
+"delivery.tab_all_admin"         = "Все";
+"delivery.unassigned"            = "Не назначен";
+
+// Admin
+"admin.providers"                = "Поставщики";
+"admin.no_providers"             = "Поставщиков не найдено.";
+"admin.items_all"                = "Все товары";

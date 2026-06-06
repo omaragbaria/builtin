@@ -1,0 +1,120 @@
+// Common
+"common.cancel"          = "إلغاء";
+"common.save"            = "حفظ";
+"common.add_to_cart"     = "أضف للسلة";
+"common.in_stock"        = "متوفر";
+"common.out_of_stock"    = "غير متوفر";
+"common.loading"         = "جارٍ التحميل…";
+"common.retry"           = "إعادة المحاولة";
+"common.back"            = "رجوع";
+"common.details"         = "التفاصيل";
+"common.update"          = "تحديث";
+
+// Tab bar
+"tab.home"               = "الرئيسية";
+"tab.products"           = "المنتجات";
+"tab.estimate"           = "تقدير";
+"tab.cart"               = "السلة";
+"tab.track"              = "تتبّع";
+"tab.profile"            = "الملف الشخصي";
+"tab.items"              = "العناصر";
+"tab.locations"          = "الفروع";
+"tab.dashboard"          = "اللوحة";
+"tab.deliveries"         = "الشحنات";
+
+// Login
+"login.title"            = "BuiltIn";
+"login.subtitle"         = "منصة مواد البناء";
+"login.username"         = "اسم المستخدم";
+"login.password"         = "كلمة المرور";
+"login.sign_in"          = "تسجيل الدخول";
+
+// Cart
+"cart.title"             = "السلة";
+"cart.empty.title"       = "سلة التسوق فارغة";
+"cart.empty.subtitle"    = "أضف عناصر من كتالوج المنتجات للبدء.";
+"cart.shipping"          = "الشحن";
+"cart.items"             = "العناصر";
+"cart.total"             = "الإجمالي";
+"cart.checkout"          = "متابعة إلى الدفع";
+"cart.method.pickup"     = "استلام";
+"cart.method.express"    = "سريع جدًا";
+"cart.method.fast"       = "سريع";
+"cart.method.standard"   = "عادي";
+
+// Checkout
+"checkout.title"             = "الدفع";
+"checkout.shipping_method"   = "طريقة الشحن";
+"checkout.dropoff"           = "موقع التسليم";
+"checkout.dropoff.hint"      = "اضغط على الخريطة لتحديد موقع التسليم.";
+"checkout.order_summary"     = "ملخص الطلب";
+"checkout.place_order"       = "تأكيد الطلب";
+
+// Estimate
+"estimate.title"             = "تقدير";
+"estimate.tab.calculator"    = "الحاسبة";
+"estimate.tab.agent"         = "المساعد الذكي";
+
+// Calculator
+"calculator.structure"             = "نوع الهيكل";
+"calculator.structure.roof_slab"   = "سطح / بلاطة أرضية";
+"calculator.structure.wall"        = "جدار";
+"calculator.length"                = "الطول (م)";
+"calculator.width"                 = "العرض (م)";
+"calculator.height"                = "الارتفاع (م)";
+"calculator.thickness"             = "السمك (م)";
+"calculator.calculate"             = "احسب المواد";
+"calculator.no_match"              = "لا توجد عناصر مطابقة في الكتالوج.";
+
+// Agent
+"agent.prompt"             = "صف ما تريد بناءه";
+"agent.placeholder"        = "مثال: خزانة حائطية من خشب البلوط، 4م عرض، 60سم عمق، 1.8م ارتفاع";
+
+// Order tracking
+"tracking.title"               = "تتبّع الطلب";
+"tracking.placeholder"         = "رقم الطلب";
+"tracking.track"               = "تتبّع";
+"tracking.status"              = "حالة التوصيل";
+"tracking.eta"                 = "الوصول المتوقع";
+"tracking.order_details"       = "تفاصيل الطلب";
+"tracking.driver"              = "المندوب";
+"tracking.vehicle"             = "المركبة";
+"tracking.driver_location"     = "موقع المندوب";
+"tracking.driver_pending"      = "موقع المندوب غير متاح بعد";
+"tracking.current"             = "الحالي";
+"tracking.updated"             = "آخر تحديث";
+"tracking.stage.pending"       = "تم استلام الطلب";
+"tracking.stage.accepted"      = "قبله المندوب";
+"tracking.stage.in_delivery"   = "في الطريق";
+"tracking.stage.arrived"       = "تم التسليم";
+
+// Profile
+"profile.title"            = "الملف الشخصي";
+"profile.language"         = "اللغة";
+"profile.sign_out"         = "تسجيل الخروج";
+
+// Provider
+"provider.items"           = "عناصري";
+"provider.add_item"        = "إضافة عنصر";
+"provider.locations"       = "فروعي";
+"provider.add_location"    = "إضافة فرع";
+
+// Delivery
+"delivery.dashboard"             = "اللوحة";
+"delivery.pending"               = "بانتظار التعيين";
+"delivery.accepted"              = "مقبول";
+"delivery.in_delivery"           = "قيد التوصيل";
+"delivery.arrived"               = "وصل";
+"delivery.my_deliveries"         = "شحناتي";
+"delivery.accept"                = "قبول الطرد";
+"delivery.no_pending"            = "لا توجد طرود بانتظار التعيين حاليًا.";
+"delivery.no_mine"               = "لا توجد شحنات مُسندة إليك بعد.";
+"delivery.update_stage"          = "تحديث المرحلة";
+"delivery.set_eta"               = "تعيين وقت الوصول";
+"delivery.tab_all_admin"         = "الكل";
+"delivery.unassigned"            = "غير مُسنَد";
+
+// Admin
+"admin.providers"                = "الموردون";
+"admin.no_providers"             = "لا يوجد موردون.";
+"admin.items_all"                = "كل العناصر";

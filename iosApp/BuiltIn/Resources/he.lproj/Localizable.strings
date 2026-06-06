@@ -1,0 +1,120 @@
+// Common
+"common.cancel"          = "ביטול";
+"common.save"            = "שמור";
+"common.add_to_cart"     = "הוסף לעגלה";
+"common.in_stock"        = "במלאי";
+"common.out_of_stock"    = "אזל מהמלאי";
+"common.loading"         = "טוען…";
+"common.retry"           = "נסה שוב";
+"common.back"            = "חזרה";
+"common.details"         = "פרטים";
+"common.update"          = "עדכן";
+
+// Tab bar
+"tab.home"               = "בית";
+"tab.products"           = "מוצרים";
+"tab.estimate"           = "אומדן";
+"tab.cart"               = "עגלה";
+"tab.track"              = "מעקב";
+"tab.profile"            = "פרופיל";
+"tab.items"              = "פריטים";
+"tab.locations"          = "סניפים";
+"tab.dashboard"          = "לוח בקרה";
+"tab.deliveries"         = "משלוחים";
+
+// Login
+"login.title"            = "BuiltIn";
+"login.subtitle"         = "פלטפורמת חומרי בנייה";
+"login.username"         = "שם משתמש";
+"login.password"         = "סיסמא";
+"login.sign_in"          = "התחבר";
+
+// Cart
+"cart.title"             = "עגלה";
+"cart.empty.title"       = "העגלה ריקה";
+"cart.empty.subtitle"    = "הוסף פריטים מקטלוג המוצרים כדי להתחיל.";
+"cart.shipping"          = "משלוח";
+"cart.items"             = "פריטים";
+"cart.total"             = "סה\"כ";
+"cart.checkout"          = "המשך לתשלום";
+"cart.method.pickup"     = "איסוף";
+"cart.method.express"    = "אקספרס";
+"cart.method.fast"       = "מהיר";
+"cart.method.standard"   = "סטנדרטי";
+
+// Checkout
+"checkout.title"             = "תשלום";
+"checkout.shipping_method"   = "אופן המשלוח";
+"checkout.dropoff"           = "מיקום מסירה";
+"checkout.dropoff.hint"      = "הקש על המפה כדי לסמן את מיקום המסירה.";
+"checkout.order_summary"     = "סיכום הזמנה";
+"checkout.place_order"       = "בצע הזמנה";
+
+// Estimate
+"estimate.title"             = "אומדן";
+"estimate.tab.calculator"    = "מחשבון";
+"estimate.tab.agent"         = "עוזר AI";
+
+// Calculator
+"calculator.structure"             = "סוג מבנה";
+"calculator.structure.roof_slab"   = "גג / רצפה";
+"calculator.structure.wall"        = "קיר";
+"calculator.length"                = "אורך (מ')";
+"calculator.width"                 = "רוחב (מ')";
+"calculator.height"                = "גובה (מ')";
+"calculator.thickness"             = "עובי (מ')";
+"calculator.calculate"             = "חשב חומרים";
+"calculator.no_match"              = "לא נמצאו פריטים מתאימים בקטלוג.";
+
+// Agent
+"agent.prompt"             = "תאר מה אתה רוצה לבנות";
+"agent.placeholder"        = "לדוגמא: ארון קיר מעץ אלון, 4 מ' רוחב, 60 ס\"מ עומק, 1.8 מ' גובה";
+
+// Order tracking
+"tracking.title"               = "מעקב הזמנה";
+"tracking.placeholder"         = "מספר הזמנה";
+"tracking.track"               = "עקוב";
+"tracking.status"              = "סטטוס משלוח";
+"tracking.eta"                 = "זמן הגעה";
+"tracking.order_details"       = "פרטי ההזמנה";
+"tracking.driver"              = "שליח";
+"tracking.vehicle"             = "רכב";
+"tracking.driver_location"     = "מיקום השליח";
+"tracking.driver_pending"      = "מיקום השליח עדיין לא זמין";
+"tracking.current"             = "נוכחי";
+"tracking.updated"             = "עודכן";
+"tracking.stage.pending"       = "ההזמנה התקבלה";
+"tracking.stage.accepted"      = "נלקחה על ידי שליח";
+"tracking.stage.in_delivery"   = "במשלוח";
+"tracking.stage.arrived"       = "נמסרה";
+
+// Profile
+"profile.title"            = "פרופיל";
+"profile.language"         = "שפה";
+"profile.sign_out"         = "התנתק";
+
+// Provider
+"provider.items"           = "הפריטים שלי";
+"provider.add_item"        = "הוסף פריט";
+"provider.locations"       = "הסניפים שלי";
+"provider.add_location"    = "הוסף סניף";
+
+// Delivery
+"delivery.dashboard"             = "לוח בקרה";
+"delivery.pending"               = "ממתין לשיוך";
+"delivery.accepted"              = "נלקחה";
+"delivery.in_delivery"           = "במשלוח";
+"delivery.arrived"               = "נמסרה";
+"delivery.my_deliveries"         = "המשלוחים שלי";
+"delivery.accept"                = "קבל חבילה";
+"delivery.no_pending"            = "אין כעת חבילות הממתינות לשיוך.";
+"delivery.no_mine"               = "אין משלוחים משויכים אליך עדיין.";
+"delivery.update_stage"          = "עדכן שלב";
+"delivery.set_eta"               = "קבע זמן הגעה";
+"delivery.tab_all_admin"         = "הכל";
+"delivery.unassigned"            = "לא משויך";
+
+// Admin
+"admin.providers"                = "ספקים";
+"admin.no_providers"             = "לא נמצאו ספקים.";
+"admin.items_all"                = "כל הפריטים";

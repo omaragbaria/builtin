@@ -2,26 +2,35 @@ import SwiftUI
 
 struct RootView: View {
     @EnvironmentObject private var appState: AppState
+    @State private var langTrigger = UUID()
 
     var body: some View {
-        if appState.isLoggedIn, let user = appState.currentUser {
-            switch user.userType {
-            case .customer, .enterpriseUser:
-                CustomerTabView()
-            case .provider:
-                ProviderTabView()
-            case .delivery:
-                DeliveryTabView()
-            case .superAdmin:
-                AdminTabView()
+        Group {
+            if appState.isLoggedIn, let user = appState.currentUser {
+                switch user.userType {
+                case .customer, .enterpriseUser:
+                    CustomerTabView()
+                case .provider:
+                    ProviderTabView()
+                case .delivery:
+                    DeliveryTabView()
+                case .superAdmin:
+                    AdminTabView()
+                }
+            } else {
+                LoginView()
             }
-        } else {
-            LoginView()
+        }
+        .tint(Theme.amber)
+        .environment(\.layoutDirection, L10n.current.isRTL ? .rightToLeft : .leftToRight)
+        .id(langTrigger)
+        .onReceive(NotificationCenter.default.publisher(for: .languageChanged)) { _ in
+            langTrigger = UUID()
         }
     }
 }
 
-// MARK: - Tab root placeholders (replaced in later phases)
+// MARK: - Tab roots
 
 struct CustomerTabView: View {
     @EnvironmentObject private var appState: AppState
@@ -29,33 +38,33 @@ struct CustomerTabView: View {
     var body: some View {
         TabView {
             HomeView()
-                .tabItem { Label("Home", systemImage: "house") }
+                .tabItem { Label(L10n.t("tab.home"), systemImage: "house") }
 
             NavigationStack {
                 ProductsView()
             }
-            .tabItem { Label("Products", systemImage: "square.grid.2x2") }
+            .tabItem { Label(L10n.t("tab.products"), systemImage: "square.grid.2x2") }
 
             NavigationStack {
                 EstimateView()
             }
-            .tabItem { Label("Estimate", systemImage: "function") }
+            .tabItem { Label(L10n.t("tab.estimate"), systemImage: "function") }
 
             NavigationStack {
                 CartView()
             }
             .badge(appState.cartCount > 0 ? appState.cartCount : 0)
-            .tabItem { Label("Cart", systemImage: "cart") }
+            .tabItem { Label(L10n.t("tab.cart"), systemImage: "cart") }
 
             NavigationStack {
                 OrderTrackingView(initialDealId: appState.lastDealId)
             }
-            .tabItem { Label("Track", systemImage: "location.circle") }
+            .tabItem { Label(L10n.t("tab.track"), systemImage: "location.circle") }
 
             NavigationStack {
                 ProfileView()
             }
-            .tabItem { Label("Profile", systemImage: "person") }
+            .tabItem { Label(L10n.t("tab.profile"), systemImage: "person") }
         }
     }
 }
@@ -63,9 +72,20 @@ struct CustomerTabView: View {
 struct ProviderTabView: View {
     var body: some View {
         TabView {
-            Text("My Items").tabItem { Label("Items", systemImage: "shippingbox") }
-            Text("Locations").tabItem { Label("Locations", systemImage: "mappin.and.ellipse") }
-            Text("Profile").tabItem { Label("Profile", systemImage: "person") }
+            NavigationStack {
+                ProviderItemsView()
+            }
+            .tabItem { Label(L10n.t("provider.items"), systemImage: "shippingbox") }
+
+            NavigationStack {
+                ProviderLocationsView()
+            }
+            .tabItem { Label(L10n.t("tab.locations"), systemImage: "mappin.and.ellipse") }
+
+            NavigationStack {
+                ProfileView()
+            }
+            .tabItem { Label(L10n.t("tab.profile"), systemImage: "person") }
         }
     }
 }
@@ -73,9 +93,20 @@ struct ProviderTabView: View {
 struct DeliveryTabView: View {
     var body: some View {
         TabView {
-            Text("Dashboard").tabItem { Label("Dashboard", systemImage: "gauge") }
-            Text("My Deliveries").tabItem { Label("Deliveries", systemImage: "shippingbox.and.arrow.backward") }
-            Text("Profile").tabItem { Label("Profile", systemImage: "person") }
+            NavigationStack {
+                DeliveryDashboardView()
+            }
+            .tabItem { Label(L10n.t("tab.dashboard"), systemImage: "gauge") }
+
+            NavigationStack {
+                MyDeliveriesView()
+            }
+            .tabItem { Label(L10n.t("delivery.my_deliveries"), systemImage: "shippingbox.and.arrow.backward") }
+
+            NavigationStack {
+                ProfileView()
+            }
+            .tabItem { Label(L10n.t("tab.profile"), systemImage: "person") }
         }
     }
 }
@@ -83,11 +114,17 @@ struct DeliveryTabView: View {
 struct AdminTabView: View {
     var body: some View {
         TabView {
-            Text("Deliveries").tabItem { Label("Deliveries", systemImage: "shippingbox") }
-            Text("Items").tabItem { Label("Items", systemImage: "square.grid.2x2") }
-            Text("Providers").tabItem { Label("Providers", systemImage: "building.2") }
-            Text("Profile").tabItem { Label("Profile", systemImage: "person") }
+            NavigationStack { AdminDeliveriesView() }
+                .tabItem { Label(L10n.t("tab.deliveries"), systemImage: "shippingbox") }
+
+            NavigationStack { ProductsView() }
+                .tabItem { Label(L10n.t("tab.items"), systemImage: "square.grid.2x2") }
+
+            NavigationStack { AdminProvidersView() }
+                .tabItem { Label(L10n.t("admin.providers"), systemImage: "building.2") }
+
+            NavigationStack { ProfileView() }
+                .tabItem { Label(L10n.t("tab.profile"), systemImage: "person") }
         }
     }
 }
-

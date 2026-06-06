@@ -59,6 +59,7 @@ struct MatchedItemRow: View {
             }
             .buttonStyle(.bordered)
             .disabled(isAdding || added)
+            .accessibilityLabel(Text(L10n.t("common.add_to_cart")))
         }
         .padding(.vertical, 4)
     }

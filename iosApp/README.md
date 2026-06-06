@@ -76,7 +76,15 @@ Consumes the same REST API as the web app at `http://<host>:8080/api`.
 - [x] Phase 2 — Authentication
 - [x] Phase 3 — Customer Flow (Home, Products, Cart, Tracking)
 - [x] Phase 4 — AI Tools (Calculator, Agent)
-- [ ] Phase 5 — Provider Flow
-- [ ] Phase 6 — Delivery Flow
-- [ ] Phase 7 — Admin Flow
-- [ ] Phase 8 — Polish (i18n, dark mode, accessibility)
+- [x] Phase 5 — Visual & Localization Parity with WebApp
+- [x] Phase 6 — Provider Flow
+- [x] Phase 7 — Delivery Flow
+- [x] Phase 8 — Admin Flow
+- [x] Phase 9 — Polish (dark mode, accessibility)
+
+### Phase 5 — Visual & Localization Parity with WebApp
+Bring the iOS app's look-and-feel and language coverage to parity with the webApp surface (the post-maintenance state):
+- **Logos & imagery:** import `webApp/src/main/resources/static/img/logo.svg` and `logo-icon.svg` into the iOS asset catalog; render the wordmark on `LoginView`, the icon as the app icon and nav-bar brand.
+- **Color palette:** match the webApp's Bootstrap-derived palette — dark navbar, warning-yellow accent for primary actions, the same blue / green / red semantic colors used for delivery stages. Centralize as a `Theme` enum or `Color` extension so the existing views can adopt it without churn.
+- **Languages:** ship `Localizable.strings` for `en` / `he` / `ar` / `ru` / `zh` covering every user-facing string in the views we have so far, mirroring the keys/values already in `webApp/src/main/resources/messages*.properties`. Wire a language picker in `ProfileView` (or the navbar) like the webApp's `?lang=` switcher; persist the choice in `UserDefaults`.
+- **RTL:** verify `he` / `ar` lay out right-to-left (iOS handles this when `Localizable.strings` is present and the user picks an RTL language) — adjust any views that hard-code leading/trailing.

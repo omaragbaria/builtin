@@ -26,15 +26,13 @@ struct LoginView: View {
 
     private var header: some View {
         VStack(spacing: 10) {
-            Image(systemName: "building.2.crop.circle.fill")
-                .font(.system(size: 72))
-                .foregroundStyle(.tint)
-                .symbolRenderingMode(.hierarchical)
+            BrandLogo(size: 96)
 
-            Text("BuiltIn")
+            LocalizedText("login.title")
                 .font(.largeTitle.bold())
+                .foregroundStyle(Theme.navy)
 
-            Text("Building Materials Platform")
+            LocalizedText("login.subtitle")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
@@ -44,7 +42,7 @@ struct LoginView: View {
 
     private var form: some View {
         VStack(spacing: 14) {
-            TextField("Username", text: $viewModel.username)
+            TextField(L10n.t("login.username"), text: $viewModel.username)
                 .textFieldStyle(.roundedBorder)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
@@ -52,7 +50,7 @@ struct LoginView: View {
                 .submitLabel(.next)
                 .onSubmit { focused = .password }
 
-            SecureField("Password", text: $viewModel.password)
+            SecureField(L10n.t("login.password"), text: $viewModel.password)
                 .textFieldStyle(.roundedBorder)
                 .focused($focused, equals: .password)
                 .submitLabel(.go)
@@ -65,13 +63,14 @@ struct LoginView: View {
                     if viewModel.isLoading {
                         ProgressView().tint(.white)
                     } else {
-                        Text("Sign In").fontWeight(.semibold)
+                        LocalizedText("login.sign_in").fontWeight(.semibold)
                     }
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 46)
             }
             .buttonStyle(.borderedProminent)
+            .tint(Theme.amber)
             .disabled(viewModel.isLoading || viewModel.username.isEmpty || viewModel.password.isEmpty)
         }
         .animation(.easeInOut(duration: 0.2), value: viewModel.errorMessage != nil)
