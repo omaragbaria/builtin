@@ -62,6 +62,11 @@ struct CustomerTabView: View {
             .tabItem { Label(L10n.t("tab.track"), systemImage: "location.circle") }
 
             NavigationStack {
+                PurchasesView()
+            }
+            .tabItem { Label(L10n.t("tab.purchases"), systemImage: "bag") }
+
+            NavigationStack {
                 ProfileView()
             }
             .tabItem { Label(L10n.t("tab.profile"), systemImage: "person") }

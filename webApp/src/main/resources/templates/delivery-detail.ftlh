@@ -131,7 +131,7 @@
             <i class="bi bi-clock-fill fs-5"></i>
             <div>
               <div class="fw-semibold">${springMacroRequestContext.getMessage('detail.estimated_arrival')}</div>
-              <div>${delivery.eta?string("EEEE, dd MMMM yyyy 'at' HH:mm")}</div>
+              <div>${delivery.eta?replace('T', ' ')?keep_before('.')}</div>
             </div>
           </div>
           <#else>
@@ -238,7 +238,7 @@
               <form method="post" action="/deliveries/${delivery.id}/eta">
                 <div class="input-group">
                   <input type="datetime-local" name="eta" class="form-control"
-                         <#if delivery.eta??>value="${delivery.eta?string("yyyy-MM-dd'T'HH:mm")}"</#if>/>
+                         <#if delivery.eta??>value="${delivery.eta?keep_before('.')}"</#if>/>
                   <button type="submit" class="btn btn-outline-primary">${springMacroRequestContext.getMessage('detail.set_eta')}</button>
                 </div>
               </form>
@@ -361,12 +361,12 @@
           <#if delivery.assignedAt??>
           <li class="list-group-item d-flex justify-content-between py-2">
             <span class="text-muted small">${springMacroRequestContext.getMessage('detail.accepted_at')}</span>
-            <span class="small">${delivery.assignedAt?string("dd MMM, HH:mm")}</span>
+            <span class="small">${delivery.assignedAt?replace('T', ' ')?keep_before('.')}</span>
           </li>
           </#if>
           <li class="list-group-item d-flex justify-content-between py-2">
             <span class="text-muted small">${springMacroRequestContext.getMessage('detail.created')}</span>
-            <span class="small">${delivery.createdAt?string("dd MMM yyyy")}</span>
+            <span class="small">${delivery.createdAt?keep_before('T')}</span>
           </li>
         </ul>
       </div>

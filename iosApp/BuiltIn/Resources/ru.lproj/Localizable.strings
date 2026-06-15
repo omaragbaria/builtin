@@ -17,6 +17,8 @@
 "tab.cart"               = "Корзина";
 "tab.track"              = "Отслеживание";
 "tab.profile"            = "Профиль";
+"tab.purchases"          = "Покупки";
+"purchases.empty"        = "Вы ещё не размещали заказов.";
 "tab.items"              = "Товары";
 "tab.locations"          = "Точки";
 "tab.dashboard"          = "Панель";

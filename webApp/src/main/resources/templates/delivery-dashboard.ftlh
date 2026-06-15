@@ -189,7 +189,7 @@
           <div class="text-end">
             <div class="text-muted small">${springMacroRequestContext.getMessage('delivery.col.eta')}</div>
             <div class="fw-semibold text-primary">
-              <i class="bi bi-clock me-1"></i>${d.eta?string("dd MMM yyyy, HH:mm")}
+              <i class="bi bi-clock me-1"></i>${d.eta?replace('T', ' ')?keep_before('.')}
             </div>
           </div>
           </#if>
@@ -219,7 +219,7 @@
           <form method="post" action="/deliveries/${d.id}/eta" class="d-flex align-items-center gap-2">
             <label class="text-muted small mb-0">${springMacroRequestContext.getMessage('delivery.col.eta')}:</label>
             <input type="datetime-local" name="eta" class="form-control form-control-sm" style="width:200px;"
-                   <#if d.eta??>value="${d.eta?string("yyyy-MM-dd'T'HH:mm")}"</#if>/>
+                   <#if d.eta??>value="${d.eta?keep_before('.')}"</#if>/>
             <button type="submit" class="btn btn-outline-secondary btn-sm">
               <i class="bi bi-clock-fill"></i> ${springMacroRequestContext.getMessage('delivery.set')}
             </button>
@@ -325,7 +325,7 @@
                 <#else>—</#if>
               </td>
               <td class="text-nowrap small">
-                <#if d.eta??>${d.eta?string("dd MMM, HH:mm")}<#else><span class="text-muted">—</span></#if>
+                <#if d.eta??>${d.eta?replace('T', ' ')?keep_before('.')}<#else><span class="text-muted">—</span></#if>
               </td>
               <td class="fw-semibold">₪${d.dealTotal!""}</td>
               <td><span class="badge bg-light text-dark border">${d.dealShippingMethod!""}</span></td>

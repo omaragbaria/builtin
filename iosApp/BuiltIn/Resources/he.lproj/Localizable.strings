@@ -17,6 +17,8 @@
 "tab.cart"               = "עגלה";
 "tab.track"              = "מעקב";
 "tab.profile"            = "פרופיל";
+"tab.purchases"          = "הזמנות";
+"purchases.empty"        = "עדיין לא ביצעת הזמנות.";
 "tab.items"              = "פריטים";
 "tab.locations"          = "סניפים";
 "tab.dashboard"          = "לוח בקרה";

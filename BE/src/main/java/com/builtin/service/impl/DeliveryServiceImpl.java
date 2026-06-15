@@ -103,6 +103,14 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public void autoAssignNearest(Long deliveryId, Double deliveryLat, Double deliveryLng) {
+        // Mocked checkout: auto-assign is best-effort. If we can't pick a driver
+        // (no delivery coordinates, or no driver with a known location is free),
+        // leave the delivery PENDING_ASSIGNMENT so a DLV account can pick it up
+        // manually. Checkout must never fail because of assignment.
+        if (deliveryLat == null || deliveryLng == null) {
+            return;
+        }
+
         List<DeliveryAccount> candidates = deliveryAccountRepository.findByLatitudeIsNotNullAndLongitudeIsNotNull();
         Set<Long> busyIds = Set.copyOf(deliveryRepository.findActiveDriverAccountIds(
                 List.of(DeliveryStage.ACCEPTED, DeliveryStage.IN_DELIVERY)));
@@ -111,9 +119,12 @@ public class DeliveryServiceImpl implements DeliveryService {
                 .filter(da -> !busyIds.contains(da.getId()))
                 .min(Comparator.comparingDouble(da ->
                         haversineKm(deliveryLat, deliveryLng, da.getLatitude(), da.getLongitude())))
-                .orElseThrow(() -> new IllegalStateException(
-                        "No drivers are currently available for immediate pickup. " +
-                        "Please try again shortly or choose another shipping method."));
+                .orElse(null);
+
+        if (nearest == null) {
+            // No eligible driver — leave it pending for manual pickup.
+            return;
+        }
 
         Delivery delivery = findEntity(deliveryId);
         delivery.setDeliveryAccount(nearest);

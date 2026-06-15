@@ -17,6 +17,8 @@
 "tab.cart"               = "购物车";
 "tab.track"              = "追踪";
 "tab.profile"            = "我的";
+"tab.purchases"          = "我的订单";
+"purchases.empty"        = "您还没有下过订单。";
 "tab.items"              = "商品";
 "tab.locations"          = "门店";
 "tab.dashboard"          = "面板";

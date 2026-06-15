@@ -26,6 +26,19 @@ public class DealClient {
                 .block();
     }
 
+    public List<DealDto> getDealsByUser(Long userId) {
+        try {
+            return webClient.get()
+                    .uri("/deals/user/{id}", userId)
+                    .retrieve()
+                    .bodyToFlux(DealDto.class)
+                    .collectList()
+                    .block();
+        } catch (Exception e) {
+            return List.of();
+        }
+    }
+
     public List<ItemDto> getDealItems(Long dealId) {
         try {
             return webClient.get()

@@ -32,6 +32,15 @@ final class AuthViewModel: ObservableObject {
         do {
             var providerId: Int? = nil
             var deliveryAccountId: Int? = nil
+            var resolvedId = 0
+
+            // Resolve the real user id from the DB so orders attach to this
+            // account and appear under the Purchases tab.
+            if let dbUser: UserDto = try? await APIClient.shared.request(
+                .userByEmail(email: "\(key)@builtin.com")
+            ) {
+                resolvedId = dbUser.id
+            }
 
             // Resolve real provider ID from DB for named provider accounts
             if key == "patara" {
@@ -52,7 +61,7 @@ final class AuthViewModel: ObservableObject {
             }
 
             let user = UserDto(
-                id: 0,
+                id: resolvedId,
                 firstName: key.capitalized,
                 lastName: "Account",
                 email: "\(key)@builtin.com",

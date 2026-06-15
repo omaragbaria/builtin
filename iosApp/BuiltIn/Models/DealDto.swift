@@ -17,9 +17,9 @@ enum DealStatus: String, Codable, CaseIterable {
 
     var displayLabel: String {
         switch self {
-        case .complete:        return "Complete"
+        case .complete:        return "Delivered"
         case .processing:      return "Processing"
-        case .pendingApproval: return "Pending Approval"
+        case .pendingApproval: return "Pending"
         case .canceled:        return "Canceled"
         case .delivery:        return "Out for Delivery"
         }

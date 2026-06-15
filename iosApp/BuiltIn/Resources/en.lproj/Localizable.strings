@@ -20,6 +20,8 @@
 "tab.cart"               = "Cart";
 "tab.track"              = "Track";
 "tab.profile"            = "Profile";
+"tab.purchases"          = "Purchases";
+"purchases.empty"        = "You haven't placed any orders yet.";
 "tab.items"              = "Items";
 "tab.locations"          = "Locations";
 "tab.dashboard"          = "Dashboard";

@@ -40,6 +40,11 @@ public class DealServiceImpl implements DealService {
     }
 
     @Override
+    public List<Deal> getDealsByUser(Long userId) {
+        return dealRepository.findByUserId(userId);
+    }
+
+    @Override
     public Deal getDealById(Long id) {
         return dealRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Deal", id));
@@ -112,8 +117,11 @@ public class DealServiceImpl implements DealService {
                 .deliveryLatitude(request.getDeliveryLatitude())
                 .deliveryLongitude(request.getDeliveryLongitude())
                 .deliveryTimeLabel(deliveryTimeLabel);
-        if (request.getUserId() != null) {
-            builder.user(userRepository.getReferenceById(request.getUserId()));
+        // Guest checkout: clients may send a null/0 userId. Only attach a user
+        // when the id is positive AND actually exists, to avoid a FK violation.
+        Long userId = request.getUserId();
+        if (userId != null && userId > 0 && userRepository.existsById(userId)) {
+            builder.user(userRepository.getReferenceById(userId));
         }
         Deal deal = builder.build();
 

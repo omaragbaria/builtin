@@ -2,6 +2,7 @@ package com.builtin.webapp.controller;
 
 import com.builtin.webapp.client.DeliveryAccountClient;
 import com.builtin.webapp.client.ProviderClient;
+import com.builtin.webapp.client.UserClient;
 import com.builtin.webapp.dto.ProviderDto;
 import com.builtin.webapp.dto.UserDto;
 import jakarta.servlet.http.HttpSession;
@@ -34,6 +35,7 @@ public class AuthController {
 
     private final ProviderClient providerClient;
     private final DeliveryAccountClient deliveryAccountClient;
+    private final UserClient userClient;
 
     @GetMapping("/login")
     public String loginForm() {
@@ -58,6 +60,13 @@ public class AuthController {
         user.setLastName("Account");
         user.setEmail(key + "@builtin.com");
         user.setUserType(type);
+
+        // Resolve the real user id from the DB so orders attach to this account
+        // (and show up under "My Orders"). Falls back to no id for guest behavior.
+        try {
+            userClient.findByEmail(user.getEmail())
+                    .ifPresent(u -> user.setId(u.getId()));
+        } catch (Exception ignored) {}
 
         // For named provider logins, resolve the provider ID from the DB
         if ("patara".equals(key)) {

@@ -25,6 +25,11 @@ public class DealController {
         return ResponseEntity.ok(dealService.getAllDeals());
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Deal>> getDealsByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(dealService.getDealsByUser(userId));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Deal> getDealById(@PathVariable Long id) {
         return ResponseEntity.ok(dealService.getDealById(id));

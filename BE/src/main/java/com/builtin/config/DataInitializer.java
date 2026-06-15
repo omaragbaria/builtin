@@ -2,8 +2,11 @@ package com.builtin.config;
 
 import com.builtin.model.DeliveryAccount;
 import com.builtin.model.DeliveryAccountType;
+import com.builtin.model.User;
+import com.builtin.model.UserType;
 import com.builtin.model.VehicleType;
 import com.builtin.repository.DeliveryAccountRepository;
+import com.builtin.repository.UserRepository;
 import com.builtin.service.ProductSeederService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +21,28 @@ public class DataInitializer implements ApplicationRunner {
 
     private final ProductSeederService productSeederService;
     private final DeliveryAccountRepository deliveryAccountRepository;
+    private final UserRepository userRepository;
 
     @Override
     public void run(ApplicationArguments args) {
         productSeederService.seed();
         seedDeliveryAccount();
+        seedCustomer();
+    }
+
+    private void seedCustomer() {
+        if (userRepository.findByEmail("user@builtin.com").isPresent()) return;
+
+        User customer = User.builder()
+                .firstName("User")
+                .lastName("Account")
+                .email("user@builtin.com")
+                .phone("0501111111")
+                .userType(UserType.CUSTOMER)
+                .build();
+
+        userRepository.save(customer);
+        log.info("Seeded customer user: user@builtin.com");
     }
 
     private void seedDeliveryAccount() {

@@ -68,6 +68,11 @@
                 </#if>
                 <#if currentUser?? && currentUser.userType == "CUSTOMER">
                 <li class="nav-item">
+                    <a class="nav-link" href="/purchases">
+                        <i class="bi bi-bag me-1"></i>${springMacroRequestContext.getMessage('nav.my_orders')}
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/deliveries/track">
                         <i class="bi bi-search me-1"></i>${springMacroRequestContext.getMessage('nav.track_order')}
                     </a>

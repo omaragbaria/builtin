@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface DealService {
     List<Deal> getAllDeals();
+    List<Deal> getDealsByUser(Long userId);
     Deal getDealById(Long id);
     Deal createDeal(Deal deal);
     Deal updateDeal(Long id, Deal deal);

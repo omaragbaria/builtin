@@ -4,6 +4,7 @@ enum Endpoint {
     // Auth
     case login
     case logout
+    case userByEmail(email: String)
 
     // Items
     case items
@@ -25,6 +26,7 @@ enum Endpoint {
     // Deals
     case checkout
     case dealItems(dealId: Int)
+    case userDeals(userId: Int)
 
     // Deliveries
     case deliveries
@@ -53,6 +55,7 @@ enum Endpoint {
         switch self {
         case .login:                                    return "/auth/login"
         case .logout:                                   return "/auth/logout"
+        case .userByEmail(let email):                   return "/users/by-email/\(email)"
         case .items:                                    return "/items"
         case .item(let id):                             return "/items/\(id)"
         case .itemPhotos(let id):                       return "/items/\(id)/photos"
@@ -68,6 +71,7 @@ enum Endpoint {
         case .deleteProviderLocation(let pId, let lId): return "/providers/\(pId)/locations/\(lId)"
         case .checkout:                                 return "/deals/checkout"
         case .dealItems(let id):                        return "/deals/\(id)/items"
+        case .userDeals(let id):                        return "/deals/user/\(id)"
         case .deliveries:                               return "/deliveries"
         case .pendingDeliveries:                        return "/deliveries/pending"
         case .deliveriesByAccount(let id):              return "/deliveries/account/\(id)"

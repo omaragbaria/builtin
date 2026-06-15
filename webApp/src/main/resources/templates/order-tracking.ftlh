@@ -70,7 +70,7 @@
             <div class="text-end">
               <div class="text-muted small">${springMacroRequestContext.getMessage('tracking.eta')}</div>
               <div class="fw-bold text-primary fs-5">
-                <i class="bi bi-clock me-1"></i>${delivery.eta?string("EEE, dd MMM · HH:mm")}
+                <i class="bi bi-clock me-1"></i>${delivery.eta?replace('T', ' ')?keep_before('.')}
               </div>
             </div>
             <#else>

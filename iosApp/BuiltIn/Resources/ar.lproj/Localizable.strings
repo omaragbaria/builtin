@@ -17,6 +17,8 @@
 "tab.cart"               = "السلة";
 "tab.track"              = "تتبّع";
 "tab.profile"            = "الملف الشخصي";
+"tab.purchases"          = "مشترياتي";
+"purchases.empty"        = "لم تقم بأي طلبات بعد.";
 "tab.items"              = "العناصر";
 "tab.locations"          = "الفروع";
 "tab.dashboard"          = "اللوحة";
